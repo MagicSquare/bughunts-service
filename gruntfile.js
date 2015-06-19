@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 	// Unified Watch Object
 	var watchFiles = {
 		serverJS: ['gruntfile.js', 'server.js'],
-		mochaTests: ['tests/**/*.js']
+		mochaTests: ['tests/*.js']
 	};
 
 	// Project Configuration
@@ -60,7 +60,6 @@ module.exports = function(grunt) {
 		mochaTest: {
 			src: watchFiles.mochaTests,
 			options: {
-				reporter: 'mocha-spec-cov-alt',
 				require: 'server.js'
 			}
 		}
