@@ -1,4 +1,5 @@
-var Twitter = require('twitter');
+var Twitter = require('twitter'),
+    extractor = require('./app/src/extractor');
  
 var client = new Twitter({
   consumer_key: 'aDUG6MmnTUtfD5bALIDpaG1Ls',
@@ -10,18 +11,19 @@ var client = new Twitter({
 // Filter tweet on hashtags #bugshunt and #challenge1
 client.stream('statuses/filter', {track: '#bugshunt #challenge1'},  function(stream){
   stream.on('data', function(tweet) {
-  
     // Display the received tweet
     console.log(tweet);
-    
+
+    // Extract instructions
+    var instructions = extractor.extractInstructions(tweet);
+
     // Reply to the current tweet
     var parameters = {
-      status: '@' + tweet.user.name + ' Syntax error, try again',
+      status: '@' + tweet.user.name + ' ' + instructions,
       in_reply_to_status_id: tweet.id_str
     };
-    
+
     client.post('statuses/update', parameters, function(error) { console.log(error); } );
-    
   });
 
   stream.on('error', function(error) {
