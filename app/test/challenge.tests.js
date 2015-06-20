@@ -1,0 +1,127 @@
+'use strict';
+
+var should = require('should'),
+    challenge = require('../src/challenge');
+
+var map = null;
+var bug = null;
+
+describe('challenge', function () {
+    describe('moveBug', function () {
+        beforeEach(function(done) {
+            challenge.bug.x = 1;
+            challenge.bug.y = 1;
+            challenge.bug.d = challenge.TOP;
+            done();
+        });
+
+        it('should be able to make the bug move forward', function (done) {
+            challenge.moveBugForward(1);
+            challenge.bug.y.should.be.equal(2);
+
+            challenge.bug.d = challenge.RIGHT;
+            challenge.moveBugForward(1);
+            challenge.bug.x.should.be.equal(2);
+
+            challenge.bug.d = challenge.BOTTOM;
+            challenge.moveBugForward(1);
+            challenge.bug.y.should.be.equal(1);
+
+            challenge.bug.d = challenge.LEFT;
+            challenge.moveBugForward(1);
+            challenge.bug.x.should.be.equal(1);
+            done();
+        });
+
+        it('should make the bug move forward several times', function (done) {
+            challenge.moveBugForward(2);
+            challenge.bug.y.should.be.equal(3);
+            done();
+        });
+
+        it('should be able to make the bug move backward', function (done) {
+            challenge.moveBugBackward(1);
+            challenge.bug.y.should.be.equal(0);
+
+            challenge.bug.d = challenge.RIGHT;
+            challenge.moveBugBackward(1);
+            challenge.bug.x.should.be.equal(0);
+
+            challenge.bug.d = challenge.BOTTOM;
+            challenge.moveBugBackward(1);
+            challenge.bug.y.should.be.equal(1);
+
+            challenge.bug.d = challenge.LEFT;
+            challenge.moveBugBackward(1);
+            challenge.bug.x.should.be.equal(1);
+            done();
+        });
+
+        it('should make the bug move backward several times', function (done) {
+            challenge.bug.d = challenge.BOTTOM;
+            challenge.moveBugBackward(2);
+            challenge.bug.y.should.be.equal(3);
+            done();
+        });
+
+        it('should be able to make the bug turn', function (done) {
+            challenge.turnBugLeft(1);
+            challenge.bug.d.should.be.equal(challenge.LEFT);
+            challenge.turnBugRight(1);
+            challenge.bug.d.should.be.equal(challenge.TOP);
+            done();
+        });
+
+        it('should make the bug turn several times', function (done) {
+            challenge.turnBugLeft(2);
+            challenge.bug.d.should.be.equal(challenge.BOTTOM);
+            challenge.turnBugRight(2);
+            challenge.bug.d.should.be.equal(challenge.TOP);
+            done();
+        });
+
+        it('should make the bug move forward when instruction is FO', function (done) {
+            challenge.tryChallenge(["FO"]);
+            challenge.bug.y.should.be.equal(2);
+            done();
+        });
+
+        it('should make the bug move back when instruction is BA', function (done) {
+            challenge.tryChallenge(["BA"]);
+            challenge.bug.y.should.be.equal(0);
+            done();
+        });
+
+        it('should make the bug turn left when instruction is TL', function (done) {
+            challenge.tryChallenge(["TL"]);
+            challenge.bug.d.should.be.equal(challenge.LEFT);
+            done();
+        });
+
+        it('should make the bug turn right when instruction is TR', function (done) {
+            challenge.tryChallenge(["TR"]);
+            challenge.bug.d.should.be.equal(challenge.RIGHT);
+            done();
+        });
+
+        it('should win when the bug reaches the goal', function (done) {
+            challenge.tryChallenge(["FO", "FO", "TR", "FO", "FO"]).should.be.equal(true);
+            done();
+        });
+
+        it('should loose when the bug use all instructions without reaching the goal', function (done) {
+            challenge.tryChallenge(["FO", "FO"]).should.be.equal(false);
+            done();
+        });
+
+        it.skip('should return number of move when the goal is reached', function (done) {
+
+            done();
+        });
+
+        it.skip('should loose when the bug is blocked', function (done) {
+            done();
+        });
+
+    })
+});
