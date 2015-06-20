@@ -6,7 +6,7 @@ var should = require('should'),
 var unknown_tweet = null,
     tweet_challenge3 = null;
 
-describe('bad_tweet extractor', function () {
+describe('tweet extractor', function () {
     before(function(done) {
         unknown_tweet = {
             text: 'blah blah blah'
