@@ -1,21 +1,39 @@
 'use strict';
 
 var should = require('should'),
-    extractor = require('../src/extractor');
+    twitter_extractor = require('../src/twitter_extractor');
 
-var bad_tweet = null;
+var unknown_tweet = null,
+    tweet_challenge3 = null;
 
 describe('bad_tweet extractor', function () {
     before(function(done) {
-        bad_tweet = {
+        unknown_tweet = {
             text: 'blah blah blah'
         };
+
+        tweet_challenge3 = {
+            text: '#bugshunt #challenge3 FO TL TL FO'
+        };
+
         done();
     });
 
-    it('should return error message when receiving a bad tweet', function (done) {
-        var instructions = extractor.extractInstructions(bad_tweet);
-        instructions.should.be.equal('Syntax Error');
+    it('should return null when receiving a bad tweet', function (done) {
+        var tweetData = twitter_extractor.extractInstructions(unknown_tweet);
+        should.not.exist(tweetData);
+        done();
+    });
+
+    it('should return the texte when receiving a good tweet', function (done) {
+        var tweetData = twitter_extractor.extractInstructions(tweet_challenge3);
+        tweetData.instructions.should.be.equal('FO TL TL FO');
+        done();
+    });
+
+    it('should return the challenge id when receiving a good tweet', function (done) {
+        var tweetData = twitter_extractor.extractInstructions(tweet_challenge3);
+        tweetData.challenge.should.be.equal('3');
         done();
     });
 });
