@@ -1,5 +1,5 @@
 var Twitter = require('twitter'),
-    extractor = require('./app/src/extractor');
+    twitter_extractor = require('./app/src/twitter_extractor');
  
 var client = new Twitter({
   consumer_key: 'aDUG6MmnTUtfD5bALIDpaG1Ls',
@@ -15,7 +15,7 @@ client.stream('statuses/filter', {track: '#bugshunt #challenge1'},  function(str
     console.log(tweet);
 
     // Extract instructions
-    var instructions = extractor.extractInstructions(tweet);
+    var instructions = twitter_extractor.extractInstructions(tweet).instructions;
 
     // Reply to the current tweet
     var parameters = {
