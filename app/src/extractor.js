@@ -1,3 +1,3 @@
 exports.extractInstructions = function (tweet) {
-    return tweet.text;
+    return 'Syntax Error';
 };

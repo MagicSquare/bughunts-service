@@ -3,20 +3,19 @@
 var should = require('should'),
     extractor = require('../src/extractor');
 
-var tweet = null;
+var bad_tweet = null;
 
-describe('tweet extractor', function () {
+describe('bad_tweet extractor', function () {
     before(function(done) {
-        tweet = {
-            // Insert twitter message
-            text: 'Try again'
+        bad_tweet = {
+            text: 'blah blah blah'
         };
         done();
     });
 
-    it('receiving the given message should return the instructions', function (done) {
-        var instructions = extractor.extractInstructions(tweet);
-        instructions.should.be.equal('Try again');
+    it('should return error message when receiving a bad tweet', function (done) {
+        var instructions = extractor.extractInstructions(bad_tweet);
+        instructions.should.be.equal('Syntax Error');
         done();
     });
 });
