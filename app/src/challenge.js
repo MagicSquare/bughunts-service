@@ -55,24 +55,7 @@ var turnBugRight = function (nbMove){
     bug.d = (bug.d + nbMove)%4;
 };
 
-var tryChallenge = function(instructions){
-    for(var i = 0; i < instructions.length; i++)
-    {
-        switch(instructions[i]) {
-            case "FO":
-                moveBugForward(1);
-                break;
-            case "BA":
-                moveBugBackward(1);
-                break;
-            case "TL":
-                turnBugLeft(1);
-                break;
-            case "TR":
-                turnBugRight(1);
-                break;
-        }
-    }
+var challengeSucceed = function(){
     return (map[bug.y][bug.x]) == GOAL;
 };
 
@@ -86,5 +69,4 @@ exports.moveBugForward = moveBugForward;
 exports.moveBugBackward = moveBugBackward;
 exports.turnBugLeft = turnBugLeft;
 exports.turnBugRight = turnBugRight;
-
-exports.tryChallenge = tryChallenge;
+exports.challengeSucceed = challengeSucceed;
