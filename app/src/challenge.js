@@ -35,12 +35,12 @@ var moveBugForward = function(nbMove){
         case LEFT:
             bug.x = bug.x-nbMove;
             break;
-    };
+    }
 };
 
 var moveBugBackward = function (nbMove){
     moveBugForward(-nbMove);
-}
+};
 
 var turnBugLeft = function (nbMove){
     var newD = bug.d - nbMove;
@@ -49,11 +49,11 @@ var turnBugLeft = function (nbMove){
     }else{
         bug.d = newD;
     }
-}
+};
 
 var turnBugRight = function (nbMove){
     bug.d = (bug.d + nbMove)%4;
-}
+};
 
 var tryChallenge = function(instructions){
     for(var i= 0; i < instructions.length; i++)
@@ -71,10 +71,10 @@ var tryChallenge = function(instructions){
             case "TR":
                 turnBugRight(1);
                 break;
-        };
+        }
     }
     return (map[bug.x][bug.y]) == GOAL;
-}
+};
 
 exports.TOP = TOP;
 exports.RIGHT = RIGHT;
