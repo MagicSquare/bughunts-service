@@ -10,15 +10,6 @@ describe('challenge', function () {
     describe('moveBug', function () {
         beforeEach(function(done) {
 
-            challenge.map =
-                [
-                    ['o','o','o','o','o'],
-                    ['o','o','o','o','o'],
-                    ['o','o','o','o','o'],
-                    ['o','o','o','g','o'],
-                    ['o','o','o','o','o']
-                ];
-
             challenge.bug.x = 1;
             challenge.bug.y = 1;
             challenge.bug.d = challenge.TOP;
@@ -116,12 +107,12 @@ describe('challenge', function () {
         });
 
         it('should win when the bug reaches the goal', function (done) {
-            challenge.tryChallenge(["TR", "FO", "FO", "TR", "FO", "FO"]).should.be.equal(true);
+            challenge.tryChallenge(["TR", "FO", "FO", "TR", "FO"]).should.be.equal(true);
             done();
         });
 
         it('should loose when the bug use all instructions without reaching the goal', function (done) {
-            challenge.tryChallenge(["FO", "FO"]).should.be.equal(false);
+            challenge.tryChallenge(["TR", "FO", "FO"]).should.be.equal(false);
             done();
         });
 
