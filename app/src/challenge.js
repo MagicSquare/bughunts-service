@@ -1,3 +1,6 @@
+var twitter_parser = require('./twitter_parser'),
+    ChallengeListener = require('./challengeListener').ChallengeListener
+
 var TOP = 0;
 var RIGHT = 1;
 var BOTTOM = 2;
@@ -55,8 +58,13 @@ var turnBugRight = function (nbMove){
     bug.d = (bug.d + nbMove)%4;
 };
 
-var challengeSucceed = function(){
+var tryChallenge = function(instructions) {
+    twitter_parser.parseInstructions(instructions, new ChallengeListener(this));
     return (map[bug.y][bug.x]) == GOAL;
+};
+
+var challengeSucceed = function(){
+
 };
 
 exports.TOP = TOP;
@@ -69,4 +77,5 @@ exports.moveBugForward = moveBugForward;
 exports.moveBugBackward = moveBugBackward;
 exports.turnBugLeft = turnBugLeft;
 exports.turnBugRight = turnBugRight;
+exports.tryChallenge = tryChallenge;
 exports.challengeSucceed = challengeSucceed;

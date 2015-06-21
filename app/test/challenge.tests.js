@@ -1,9 +1,7 @@
 'use strict';
 
 var should = require('should'),
-    challenge = require('../src/challenge'),
-    twitter_parser = require('../src/twitter_parser'),
-    ChallengeListener = require('../src/challengeListener').ChallengeListener;
+    challenge = require('../src/challenge');
 
 var map = null;
 var bug = null;
@@ -85,38 +83,36 @@ describe('challenge', function () {
         });
 
         it('should make the bug move forward when instruction is FO', function (done) {
-            twitter_parser.parseInstructions('FO', new ChallengeListener(challenge));
+            challenge.tryChallenge('FO');
             challenge.bug.y.should.be.equal(0);
             done();
         });
 
         it('should make the bug move back when instruction is BA', function (done) {
-            twitter_parser.parseInstructions('BA', new ChallengeListener(challenge));
+            challenge.tryChallenge('BA');
             challenge.bug.y.should.be.equal(2);
             done();
         });
 
         it('should make the bug turn left when instruction is LE', function (done) {
-            twitter_parser.parseInstructions('LE', new ChallengeListener(challenge));
+            challenge.tryChallenge('LE');
             challenge.bug.d.should.be.equal(challenge.LEFT);
             done();
         });
 
         it('should make the bug turn right when instruction is RI', function (done) {
-            twitter_parser.parseInstructions('RI', new ChallengeListener(challenge));
+            challenge.tryChallenge('RI');
             challenge.bug.d.should.be.equal(challenge.RIGHT);
             done();
         });
 
         it('should win when the bug reaches the goal', function (done) {
-            twitter_parser.parseInstructions('RI FO FO RI FO', new ChallengeListener(challenge));
-            challenge.challengeSucceed().should.be.equal(true);
+            challenge.tryChallenge('RI FO FO RI FO').should.be.equal(true);
             done();
         });
 
         it('should loose when the bug use all instructions without reaching the goal', function (done) {
-            twitter_parser.parseInstructions('RI FO FO', new ChallengeListener(challenge));
-            challenge.challengeSucceed().should.be.equal(false);
+            challenge.tryChallenge('RI FO FO').should.be.equal(false);
             done();
         });
 
