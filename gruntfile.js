@@ -7,7 +7,7 @@ module.exports = function (grunt) {
         mochaTests: ['app/test/*.js']
     };
     var antlrFiles = {
-        grammar: ['lang/BugHunts.g']
+        grammar: ['./app/src/lang/BugHunts.g']
     };
 
     // Project Configuration
@@ -68,7 +68,7 @@ module.exports = function (grunt) {
         },
         exec: {
             antlr: {
-                command: 'java -Xmx500M -cp ./lang/antlr-4.5-complete.jar: org.antlr.v4.Tool -Dlanguage=JavaScript -o ./app/src ' + antlrFiles.grammar
+                command: 'java -Xmx500M -cp ./lang/antlr-4.5-complete.jar: org.antlr.v4.Tool -Dlanguage=JavaScript ' + antlrFiles.grammar
             }
         }
     });
