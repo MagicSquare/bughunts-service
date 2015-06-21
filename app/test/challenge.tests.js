@@ -111,6 +111,11 @@ describe('challenge', function () {
             done();
         });
 
+        it('should win when the bug reaches the goal (parameter version)', function (done) {
+            challenge.tryChallenge('RI FO 2 RI FO').should.be.equal(true);
+            done();
+        });
+
         it('should loose when the bug use all instructions without reaching the goal', function (done) {
             challenge.tryChallenge('RI FO FO').should.be.equal(false);
             done();

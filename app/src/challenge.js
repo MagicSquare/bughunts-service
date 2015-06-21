@@ -74,4 +74,3 @@ exports.moveBugBackward = moveBugBackward;
 exports.turnBugLeft = turnBugLeft;
 exports.turnBugRight = turnBugRight;
 exports.tryChallenge = tryChallenge;
-exports.challengeSucceed = challengeSucceed;
