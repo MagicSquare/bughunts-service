@@ -63,10 +63,6 @@ var tryChallenge = function(instructions) {
     return (map[bug.y][bug.x]) == GOAL;
 };
 
-var challengeSucceed = function(){
-
-};
-
 exports.TOP = TOP;
 exports.RIGHT = RIGHT;
 exports.BOTTOM = BOTTOM;
