@@ -10,8 +10,10 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "twitter": "latest",
-    "grunt-cli": "~0.1.13"
+    "antlr4": "^4.5.2",
+    "grunt-cli": "~0.1.13",
+    "grunt-exec": "^0.4.6",
+    "twitter": "latest"
   },
   "devDependencies": {
     "grunt-concurrent": "~1.0.0",
