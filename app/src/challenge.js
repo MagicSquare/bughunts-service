@@ -7,30 +7,30 @@ var GOAL = 'g';
 var EMPTY = 'o';
 
 var bug = {
-    x:0,
-    y:0,
-    d:this.LEFT
+    x:1,
+    y:1,
+    d:TOP
 };
 
 var map =
     [
         ['o','o','o','o','o'],
         ['o','o','o','o','o'],
-        ['o','o','o','o','o'],
         ['o','o','o','g','o'],
+        ['o','o','o','o','o'],
         ['o','o','o','o','o']
     ];
 
 var moveBugForward = function(nbMove){
     switch(bug.d) {
         case TOP:
-            bug.y = bug.y+nbMove;
+            bug.y = bug.y-nbMove;
             break;
         case RIGHT:
             bug.x = bug.x+nbMove;
             break;
         case BOTTOM:
-            bug.y = bug.y-nbMove;
+            bug.y = bug.y+nbMove;
             break;
         case LEFT:
             bug.x = bug.x-nbMove;
@@ -45,7 +45,7 @@ var moveBugBackward = function (nbMove){
 var turnBugLeft = function (nbMove){
     var newD = bug.d - nbMove;
     if (newD < 0){
-        bug.d = 4 + newD;
+        bug.d = 4 + newD%4;
     }else{
         bug.d = newD;
     }
@@ -56,7 +56,7 @@ var turnBugRight = function (nbMove){
 };
 
 var tryChallenge = function(instructions){
-    for(var i= 0; i < instructions.length; i++)
+    for(var i = 0; i < instructions.length; i++)
     {
         switch(instructions[i]) {
             case "FO":
@@ -73,7 +73,7 @@ var tryChallenge = function(instructions){
                 break;
         }
     }
-    return (map[bug.x][bug.y]) == GOAL;
+    return (map[bug.y][bug.x]) == GOAL;
 };
 
 exports.TOP = TOP;
