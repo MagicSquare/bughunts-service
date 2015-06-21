@@ -9,7 +9,7 @@ var EMPTY = 'o';
 var bug = {
     x:0,
     y:0,
-    d:this.LEFT
+    d:this.RIGHT
 };
 
 var map =
@@ -24,13 +24,13 @@ var map =
 var moveBugForward = function(nbMove){
     switch(bug.d) {
         case TOP:
-            bug.y = bug.y+nbMove;
+            bug.y = bug.y-nbMove;
             break;
         case RIGHT:
             bug.x = bug.x+nbMove;
             break;
         case BOTTOM:
-            bug.y = bug.y-nbMove;
+            bug.y = bug.y+nbMove;
             break;
         case LEFT:
             bug.x = bug.x-nbMove;
@@ -45,7 +45,7 @@ var moveBugBackward = function (nbMove){
 var turnBugLeft = function (nbMove){
     var newD = bug.d - nbMove;
     if (newD < 0){
-        bug.d = 4 + newD;
+        bug.d = 4 + newD%4;
     }else{
         bug.d = newD;
     }
@@ -73,6 +73,7 @@ var tryChallenge = function(instructions){
                 break;
         }
     }
+    console.log(bug.x+", "+bug.y);
     return (map[bug.x][bug.y]) == GOAL;
 };
 

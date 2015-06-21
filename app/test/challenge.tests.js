@@ -9,6 +9,16 @@ var bug = null;
 describe('challenge', function () {
     describe('moveBug', function () {
         beforeEach(function(done) {
+
+            challenge.map =
+                [
+                    ['o','o','o','o','o'],
+                    ['o','o','o','o','o'],
+                    ['o','o','o','o','o'],
+                    ['o','o','o','g','o'],
+                    ['o','o','o','o','o']
+                ];
+
             challenge.bug.x = 1;
             challenge.bug.y = 1;
             challenge.bug.d = challenge.TOP;
@@ -17,7 +27,7 @@ describe('challenge', function () {
 
         it('should be able to make the bug move forward', function (done) {
             challenge.moveBugForward(1);
-            challenge.bug.y.should.be.equal(2);
+            challenge.bug.y.should.be.equal(0);
 
             challenge.bug.d = challenge.RIGHT;
             challenge.moveBugForward(1);
@@ -34,14 +44,15 @@ describe('challenge', function () {
         });
 
         it('should make the bug move forward several times', function (done) {
-            challenge.moveBugForward(2);
-            challenge.bug.y.should.be.equal(3);
+            challenge.bug.d = challenge.RIGHT;
+            challenge.moveBugForward(3);
+            challenge.bug.x.should.be.equal(4);
             done();
         });
 
         it('should be able to make the bug move backward', function (done) {
             challenge.moveBugBackward(1);
-            challenge.bug.y.should.be.equal(0);
+            challenge.bug.y.should.be.equal(2);
 
             challenge.bug.d = challenge.RIGHT;
             challenge.moveBugBackward(1);
@@ -58,9 +69,9 @@ describe('challenge', function () {
         });
 
         it('should make the bug move backward several times', function (done) {
-            challenge.bug.d = challenge.BOTTOM;
-            challenge.moveBugBackward(2);
-            challenge.bug.y.should.be.equal(3);
+            challenge.bug.d = challenge.TOP;
+            challenge.moveBugBackward(3);
+            challenge.bug.y.should.be.equal(4);
             done();
         });
 
@@ -73,22 +84,22 @@ describe('challenge', function () {
         });
 
         it('should make the bug turn several times', function (done) {
-            challenge.turnBugLeft(2);
+            challenge.turnBugLeft(10);
             challenge.bug.d.should.be.equal(challenge.BOTTOM);
-            challenge.turnBugRight(2);
+            challenge.turnBugRight(10);
             challenge.bug.d.should.be.equal(challenge.TOP);
             done();
         });
 
         it('should make the bug move forward when instruction is FO', function (done) {
             challenge.tryChallenge(["FO"]);
-            challenge.bug.y.should.be.equal(2);
+            challenge.bug.y.should.be.equal(0);
             done();
         });
 
         it('should make the bug move back when instruction is BA', function (done) {
             challenge.tryChallenge(["BA"]);
-            challenge.bug.y.should.be.equal(0);
+            challenge.bug.y.should.be.equal(2);
             done();
         });
 
@@ -105,7 +116,7 @@ describe('challenge', function () {
         });
 
         it('should win when the bug reaches the goal', function (done) {
-            challenge.tryChallenge(["FO", "FO", "TR", "FO", "FO"]).should.be.equal(true);
+            challenge.tryChallenge(["TR", "FO", "FO", "TR", "FO", "FO"]).should.be.equal(true);
             done();
         });
 
