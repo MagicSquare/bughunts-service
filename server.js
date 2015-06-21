@@ -26,7 +26,7 @@ client.stream('statuses/filter', {track: '#bugshunt #challenge1'},  function(str
         var instructions = twitter_extractor.extractInstructions(tweet).instructions;
 
         var message;
-        if (challenge.tryChallenge(instructions.split(' '))){
+        if (challenge.tryChallenge(instructions)){
             message = "Bravo !";
         }else{
             message = "Raté...";
