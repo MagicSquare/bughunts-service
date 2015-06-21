@@ -1,5 +1,5 @@
 var twitter_parser = require('./twitter_parser'),
-    ChallengeListener = require('./challengeListener').ChallengeListener
+    ChallengeListener = require('./challengeListener').ChallengeListener;
 
 var TOP = 0;
 var RIGHT = 1;
