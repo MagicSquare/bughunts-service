@@ -63,6 +63,7 @@ var tryChallenge = function(instructions) {
     return (map[bug.y][bug.x]) == GOAL;
 };
 
+exports.hashTag = '#challenge1';
 exports.TOP = TOP;
 exports.RIGHT = RIGHT;
 exports.BOTTOM = BOTTOM;
