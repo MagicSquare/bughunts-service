@@ -1,7 +1,7 @@
 var twitter_parser = require('./twitter_parser'),
     ChallengeListener = require('./challengeListener').ChallengeListener;
 
-function Challenge(hashTag, mapGame) {
+function Challenge(hashTag, mapGame, mapImage) {
     this.TOP = 0;
     this.RIGHT = 1;
     this.BOTTOM = 2;
@@ -18,6 +18,7 @@ function Challenge(hashTag, mapGame) {
 
     this.hashTag = hashTag;
     this.map = mapGame;
+    this.mapImage = mapImage;
 }
 
 Challenge.prototype.moveBugForward = function (nbMove) {
