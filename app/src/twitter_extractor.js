@@ -1,5 +1,5 @@
 exports.extractInstructions = function (tweet) {
-    var tweetData = tweet.text.match(/#bugshunt (.*) (.*)/);
+    var tweetData = tweet.text.match(/#bugshunt (#\S*) (.*)/);
 
     if (tweetData){
         return {

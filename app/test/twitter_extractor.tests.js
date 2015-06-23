@@ -29,7 +29,7 @@ describe('tweet extractor', function () {
 
     it('should return the challenge id when receiving a good tweet', function (done) {
         var tweetData = twitter_extractor.extractInstructions(tweet_challenge3.tweet);
-        tweetData.challenge.should.be.equal('3');
+        tweetData.challenge.should.be.equal('#challenge3');
         done();
     });
 });
