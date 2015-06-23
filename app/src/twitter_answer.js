@@ -30,7 +30,9 @@ exports.listen = function(challenge) {
             };
 
             client.post('statuses/update', parameters, function (error) {
-                console.log(error);
+                if (error) {
+                    console.log(error);
+                }
             });
         });
 
