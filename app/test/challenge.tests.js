@@ -1,10 +1,11 @@
 'use strict';
 
 var should = require('should'),
-    challenge = require('../src/challenge');
+    Challenge = require('../src/challenge');
 
 var map = null;
 var bug = null;
+var challenge = new Challenge();
 
 describe('challenge', function () {
     describe('moveBug', function () {

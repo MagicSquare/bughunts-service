@@ -2,70 +2,62 @@ var twitter_parser = require('./twitter_parser'),
     ChallengeListener = require('./challengeListener').ChallengeListener,
     challengeData = require('../../res/challenge_data');
 
-var TOP = 0;
-var RIGHT = 1;
-var BOTTOM = 2;
-var LEFT = 3;
+function Challenge() {
+    this.TOP = 0;
+    this.RIGHT = 1;
+    this.BOTTOM = 2;
+    this.LEFT = 3;
 
-var GOAL = 'g';
-var EMPTY = 'o';
+    this.GOAL = 'g';
+    this.EMPTY = 'o';
 
-var bug = {
-    x:1,
-    y:1,
-    d:TOP
-};
+    this.bug = {
+        x: 1,
+        y: 1,
+        d: this.TOP
+    };
 
-var map = challengeData.map;
+    this.map = challengeData.map;
+    this.hashTag = challengeData.hashTag;
+}
 
-var moveBugForward = function(nbMove){
-    switch(bug.d) {
-        case TOP:
-            bug.y = bug.y-nbMove;
+Challenge.prototype.moveBugForward = function (nbMove) {
+    switch (this.bug.d) {
+        case this.TOP:
+            this.bug.y = this.bug.y - nbMove;
             break;
-        case RIGHT:
-            bug.x = bug.x+nbMove;
+        case this.RIGHT:
+            this.bug.x = this.bug.x + nbMove;
             break;
-        case BOTTOM:
-            bug.y = bug.y+nbMove;
+        case this.BOTTOM:
+            this.bug.y = this.bug.y + nbMove;
             break;
-        case LEFT:
-            bug.x = bug.x-nbMove;
+        case this.LEFT:
+            this.bug.x = this.bug.x - nbMove;
             break;
     }
 };
 
-var moveBugBackward = function (nbMove){
-    moveBugForward(-nbMove);
+Challenge.prototype.moveBugBackward = function (nbMove) {
+    this.moveBugForward(-nbMove);
 };
 
-var turnBugLeft = function (nbMove){
-    var newD = bug.d - nbMove;
-    if (newD < 0){
-        bug.d = 4 + newD%4;
-    }else{
-        bug.d = newD;
+Challenge.prototype.turnBugLeft = function (nbMove) {
+    var newD = this.bug.d - nbMove;
+    if (newD < 0) {
+        this.bug.d = 4 + newD % 4;
+    } else {
+        this.bug.d = newD;
     }
 };
 
-var turnBugRight = function (nbMove){
-    bug.d = (bug.d + nbMove)%4;
+Challenge.prototype.turnBugRight = function (nbMove) {
+    this.bug.d = (this.bug.d + nbMove) % 4;
 };
 
-var tryChallenge = function(instructions) {
+Challenge.prototype.tryChallenge = function (instructions) {
     twitter_parser.parseInstructions(instructions, new ChallengeListener(this));
-    return (map[bug.y][bug.x]) == GOAL;
+    return (this.map[this.bug.y][this.bug.x]) == this.GOAL;
 };
 
-exports.hashTag = challengeData.hashTag;
-exports.TOP = TOP;
-exports.RIGHT = RIGHT;
-exports.BOTTOM = BOTTOM;
-exports.LEFT = LEFT;
-exports.bug = bug;
-exports.map = map;
-exports.moveBugForward = moveBugForward;
-exports.moveBugBackward = moveBugBackward;
-exports.turnBugLeft = turnBugLeft;
-exports.turnBugRight = turnBugRight;
-exports.tryChallenge = tryChallenge;
+module.exports = Challenge;
