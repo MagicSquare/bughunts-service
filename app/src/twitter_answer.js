@@ -17,8 +17,9 @@ exports.listen = function(challenge) {
             var instructions = twitter_extractor.extractInstructions(tweet).instructions;
 
             var message;
-            if (challenge.tryChallenge(instructions)) {
-                message = "Bravo !";
+            var result = challenge.tryChallenge(instructions);
+            if (result.win) {
+                message = "Bravo ! vous avez réussi le challenge en "+result.nbInstructions;
             } else {
                 message = "Raté...";
             }
