@@ -1,5 +1,6 @@
 var twitter_parser = require('./twitter_parser'),
-    ChallengeListener = require('./challengeListener').ChallengeListener;
+    ChallengeListener = require('./challengeListener').ChallengeListener,
+    challengeData = require('../../res/challenge_data');
 
 var TOP = 0;
 var RIGHT = 1;
@@ -15,14 +16,7 @@ var bug = {
     d:TOP
 };
 
-var map =
-    [
-        ['o','o','o','o','o'],
-        ['o','o','o','o','o'],
-        ['o','o','o','g','o'],
-        ['o','o','o','o','o'],
-        ['o','o','o','o','o']
-    ];
+var map = challengeData.map;
 
 var moveBugForward = function(nbMove){
     switch(bug.d) {
@@ -63,7 +57,7 @@ var tryChallenge = function(instructions) {
     return (map[bug.y][bug.x]) == GOAL;
 };
 
-exports.hashTag = '#challenge1';
+exports.hashTag = challengeData.hashTag;
 exports.TOP = TOP;
 exports.RIGHT = RIGHT;
 exports.BOTTOM = BOTTOM;
