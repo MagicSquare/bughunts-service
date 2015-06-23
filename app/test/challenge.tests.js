@@ -1,11 +1,12 @@
 'use strict';
 
 var should = require('should'),
-    Challenge = require('../src/challenge');
+    Challenge = require('../src/challenge'),
+    challengeData = require('../../res/challenge_data');
 
 var map = null;
 var bug = null;
-var challenge = new Challenge();
+var challenge = new Challenge(challengeData.hashTag, challengeData.map);
 
 describe('challenge', function () {
     describe('moveBug', function () {
