@@ -72,13 +72,22 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 
 Challenge.prototype.tryChallenge = function (instructions) {
     this.initBug();
+
     twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
+
     var score = new Big(0);
     if (this.nbInstructions > 0 && this.nbCases > 0) {
         score = new Big(((1/this.nbInstructions)*100) * ((1/this.nbCases)*100));
     }
+    var win = false;
+    try {
+        win = (this.map[this.bug.y-1][this.bug.x-1]) == this.GOAL;
+    } catch(e) {
+        win = false;
+    }
+
     return {
-        win : (this.map[this.bug.y-1][this.bug.x-1]) == this.GOAL,
+        win : win,
         score : score.toFixed(2)
     };
 };
