@@ -2,7 +2,7 @@ exports.tweet = {
   created_at: 'Sun Jun 21 17:41:06 +0000 2015',
   id: 612676631493275600,
   id_str: '612676631493275648',
-  text: '#bugshunt #challenge3 FO TL TL FO',
+  text: '@bugshunt_dev #challenge3 FO TL TL FO',
   source: '<a href="http://twitter.com" rel="nofollow">Twitter Web Client</a>',
   truncated: false,
   in_reply_to_status_id: null,

@@ -19,7 +19,7 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
     this.bug = {
         x: 1,
         y: 1,
-        d: this.TOP
+        d: this.RIGHT
     };
 }
 
@@ -27,7 +27,7 @@ Challenge.prototype.initBug = function() {
     this.bug = {
         x: 1,
         y: 1,
-        d: this.TOP
+        d: this.RIGHT
     };
     this.nbInstructions = 0;
 };
