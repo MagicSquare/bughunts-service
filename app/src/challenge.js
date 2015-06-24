@@ -68,7 +68,7 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 
 Challenge.prototype.tryChallenge = function (instructions) {
     this.initBug();
-    twitter_parser.parseInstructions(instructions, new ChallengeListener(this));
+    twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
     return {
         win : (this.map[this.bug.y-1][this.bug.x-1]) == this.GOAL,
         nbInstructions : this.nbInstructions

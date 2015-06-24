@@ -113,6 +113,11 @@ describe('challenge', function () {
             done();
         });
 
+        it('should win when the bug reaches the goal (case insensitive version)', function (done) {
+            challenge.tryChallenge('ri fO 2 RI Fo 2 le fO').win.should.be.equal(true);
+            done();
+        });
+
         it('should loose when the bug use all instructions without reaching the goal', function (done) {
             challenge.tryChallenge('RI FO FO').win.should.be.equal(false);
             done();
