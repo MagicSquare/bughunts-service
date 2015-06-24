@@ -6,22 +6,28 @@ var RestClient = require('node-rest-client').Client,
 
 var app = express();
 
+function extractMapArray(mapGame, nbX, nbY) {
+    var mapArray = [];
+    for (var y = 0; y < nbY; y++) {
+        var mapLine = [];
+        var line = mapGame.substring(y * nbX, (y+1) * nbX);
+        for (var i = 0; i < line.length; i++) {
+            mapLine.push(line[i]);
+        }
+        mapArray.push(mapLine);
+    }
+    return mapArray;
+}
+
 app.get('/newChallenge/:hashtag/:nbX/:nbY/:mapGame', function(req, res, next) {
     var mapClient = new RestClient();
     mapClient.get('http://151.80.235.36:8000/' + req.params.nbX + '/' + req.params.nbY +'/13/' + req.params.mapGame, function (data, response) {
-        var mapGame = [];
-        for (var y = 0; y < req.params.nbY; y++) {
-            var mapLine = [];
-            var line = req.params.mapGame.substring(y * req.params.nbX, (y+1) * req.params.nbX);
-            for (var i = 0; i < line.length; i++) {
-                mapLine.push(line[i]);
-            }
-            mapGame.push(mapLine);
-        }
+        var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
+        var challenge = new Challenge('#' + req.params.hashtag, mapArray, data);
 
-        var challenge = new Challenge('#' + req.params.hashtag, mapGame, data);
         twitter_question.ask(challenge);
         twitter_answer.listen(challenge);
+
         res.type('png').send(data);
     });
 });
