@@ -124,7 +124,8 @@ describe('challenge', function () {
         });
 
         it('should return number of instructions when the goal is reached', function (done) {
-            challenge.tryChallenge('RI FO FO RI FO FO LE FO').nbInstructions.should.be.equal(8);
+            challenge.tryChallenge('FO FO FO RI FO FO').win.should.be.equal(true);
+            challenge.tryChallenge('FO FO FO RI FO FO').score.should.be.equal('333.33');
             done();
         });
 

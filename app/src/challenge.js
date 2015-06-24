@@ -1,5 +1,6 @@
 var twitter_parser = require('./twitter_parser'),
-    ChallengeListener = require('./challengeListener').ChallengeListener;
+    ChallengeListener = require('./challengeListener').ChallengeListener,
+    Big = require('big.js');
 
 function Challenge(hashTag, mapGame, mapImage, theme) {
     this.TOP = 0;
@@ -15,6 +16,7 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
     this.mapImage = mapImage;
     this.theme = theme;
     this.nbInstructions = 0;
+    this.nbCases = 0;
 
     this.bug = {
         x: 1,
@@ -30,6 +32,7 @@ Challenge.prototype.initBug = function() {
         d: this.RIGHT
     };
     this.nbInstructions = 0;
+    this.nbCases = 0;
 };
 
 Challenge.prototype.moveBugForward = function (nbMove) {
@@ -47,6 +50,7 @@ Challenge.prototype.moveBugForward = function (nbMove) {
             this.bug.x = this.bug.x - nbMove;
             break;
     }
+    this.nbCases += nbMove;
 };
 
 Challenge.prototype.moveBugBackward = function (nbMove) {
@@ -69,9 +73,13 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 Challenge.prototype.tryChallenge = function (instructions) {
     this.initBug();
     twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
+    var score = new Big(0);
+    if (this.nbInstructions > 0 && this.nbCases > 0) {
+        score = new Big(((1/this.nbInstructions)*100) * ((1/this.nbCases)*100));
+    }
     return {
         win : (this.map[this.bug.y-1][this.bug.x-1]) == this.GOAL,
-        nbInstructions : this.nbInstructions
+        score : score.toFixed(2)
     };
 };
 
