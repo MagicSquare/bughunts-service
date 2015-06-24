@@ -86,8 +86,9 @@ describe('challenge', function () {
         });
 
         it('should make the bug move forward when instruction is FO', function (done) {
+            challenge.bug.y = 2;
             challenge.tryChallenge('FO');
-            challenge.bug.y.should.be.equal(0);
+            challenge.bug.y.should.be.equal(1);
             done();
         });
 
@@ -110,12 +111,12 @@ describe('challenge', function () {
         });
 
         it('should win when the bug reaches the goal', function (done) {
-            challenge.tryChallenge('RI FO FO RI FO').win.should.be.equal(true);
+            challenge.tryChallenge('RI FO FO RI FO FO LE FO').win.should.be.equal(true);
             done();
         });
 
         it('should win when the bug reaches the goal (parameter version)', function (done) {
-            challenge.tryChallenge('RI FO 2 RI FO').win.should.be.equal(true);
+            challenge.tryChallenge('RI FO 2 RI FO 2 LE FO').win.should.be.equal(true);
             done();
         });
 
@@ -125,7 +126,7 @@ describe('challenge', function () {
         });
 
         it('should return number of instructions when the goal is reached', function (done) {
-            challenge.tryChallenge('RI FO FO RI FO').nbInstructions.should.be.equal(5);
+            challenge.tryChallenge('RI FO FO RI FO FO LE FO').nbInstructions.should.be.equal(8);
             done();
         });
 
