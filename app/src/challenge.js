@@ -1,7 +1,7 @@
 var twitter_parser = require('./twitter_parser'),
     ChallengeListener = require('./challengeListener').ChallengeListener;
 
-function Challenge(hashTag, mapGame, mapImage) {
+function Challenge(hashTag, mapGame, mapImage, theme) {
     this.TOP = 0;
     this.RIGHT = 1;
     this.BOTTOM = 2;
@@ -19,6 +19,7 @@ function Challenge(hashTag, mapGame, mapImage) {
     this.hashTag = hashTag;
     this.map = mapGame;
     this.mapImage = mapImage;
+    this.theme = theme;
     this.nbInstructions = 0;
 }
 
