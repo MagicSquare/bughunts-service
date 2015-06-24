@@ -2,7 +2,7 @@
 
 var should = require('should'),
     Challenge = require('../src/challenge'),
-    challengeData = require('../../res/challenge_data');
+    challengeData = require('./res/challenge_test');
 
 var map = null;
 var bug = null;
@@ -12,7 +12,7 @@ describe('challenge', function () {
     describe('moveBug', function () {
         beforeEach(function(done) {
 
-            challenge = challenge = new Challenge(challengeData.hashTag, challengeData.map);
+            challenge = new Challenge(challengeData.hashTag, challengeData.map);
             challenge.bug.x = 1;
             challenge.bug.y = 1;
             challenge.bug.d = challenge.TOP;

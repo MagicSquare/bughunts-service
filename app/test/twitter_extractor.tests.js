@@ -2,7 +2,7 @@
 
 var should = require('should'),
     twitter_extractor = require('../src/twitter_extractor'),
-    tweet_challenge3 = require('./resources/tweet_challenge3.js');
+    tweet_challenge3 = require('./res/tweet_challenge3.js');
 
 var unknown_tweet = null;
 
