@@ -26,9 +26,21 @@ exports.listen = function (challenge) {
                     mapString += square;
                 });
             });
-            var instWithComma = instructions.replace(/\s/g, ';');
+
+            var splittedInstructions = instructions.split(' ');
+            var expandedInstructions = '';
+            for (var i = 0; i < splittedInstructions.length; i++) {
+                if (!isNaN(splittedInstructions[i])) {
+                    var parameter = parseInt(splittedInstructions[i]) - 1;
+                    for (var c = 0; c < parameter; c++) {
+                        expandedInstructions += splittedInstructions[i-1] + ';';
+                    }
+                } else {
+                    expandedInstructions += splittedInstructions[i] + ';';
+                }
+            }
             var mapClient = new RestClient();
-            mapClient.get('http://151.80.235.36:8000/' + nbX + '/' + nbY + '/' + challenge.theme + '/' + mapString + '/' + instWithComma, function (data, response) {
+            mapClient.get('http://151.80.235.36:8000/' + nbX + '/' + nbY + '/' + challenge.theme + '/' + mapString + '/' + expandedInstructions, function (data, response) {
                 client.post('media/upload', {media: data}, function (error, media, response) {
                     if (!error) {
                         var parameters = {
