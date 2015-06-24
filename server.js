@@ -19,9 +19,9 @@ function extractMapArray(mapGame, nbX, nbY) {
     return mapArray;
 }
 
-app.get('/newChallenge/:hashtag/:nbX/:nbY/:mapGame', function(req, res, next) {
+app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function(req, res, next) {
     var mapClient = new RestClient();
-    mapClient.get('http://151.80.235.36:8000/' + req.params.nbX + '/' + req.params.nbY +'/13/' + req.params.mapGame, function (data, response) {
+    mapClient.get('http://151.80.235.36:8000/' + req.params.nbX + '/' + req.params.nbY +'/' + req.params.theme + '/' + req.params.mapGame, function (data, response) {
         var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
         var challenge = new Challenge('#' + req.params.hashtag, mapArray, data);
 
