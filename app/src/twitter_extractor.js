@@ -1,5 +1,8 @@
+var twitter_credentials = require('../res/twitter_credentials');
+
 exports.extractInstructions = function (tweet) {
-    var tweetData = tweet.text.match(/#bugshunt (#\S*) (.*)/);
+    // TODO extract twitter account from credentials
+    var tweetData = tweet.text.match(/@bugshunt_dev (#\S*) (.*)/);
 
     if (tweetData){
         return {

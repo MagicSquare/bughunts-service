@@ -4,3 +4,5 @@ exports.credentials = { // bugshunt_dev
     access_token_key: '3337904121-Glzb3mRseE0rN8UiU7UZ3xyEamDkZmnMYUhDRqX',
     access_token_secret: 'pQu6Vit7sNKzNpqjeKQ0Gndd8u6B3b7JC8niKCgHTBZ7e'
 };
+
+exports.botAccount = '@bugshunt_dev';

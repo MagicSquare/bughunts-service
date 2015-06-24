@@ -6,7 +6,7 @@ var Twitter = require('twitter'),
 exports.listen = function (challenge) {
 
     var client = new Twitter(twitter_credentials.credentials);
-    client.stream('statuses/filter', {track: '#bugshunt ' + challenge.hashTag}, function (stream) {
+    client.stream('statuses/filter', {track: twitter_credentials.botAccount + ' ' + challenge.hashTag}, function (stream) {
         stream.on('data', function (tweet) {
             var instructions = twitter_extractor.extractInstructions(tweet).instructions;
 
