@@ -85,13 +85,6 @@ describe('challenge', function () {
             done();
         });
 
-        it('should make the bug move forward when instruction is FO', function (done) {
-            challenge.bug.y = 2;
-            challenge.tryChallenge('FO');
-            challenge.bug.y.should.be.equal(1);
-            done();
-        });
-
         it('should make the bug move back when instruction is BA', function (done) {
             challenge.tryChallenge('BA');
             challenge.bug.y.should.be.equal(2);

@@ -10,18 +10,27 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
     this.GOAL = 'g';
     this.EMPTY = 'o';
 
-    this.bug = {
-        x: 1,
-        y: 1,
-        d: this.TOP
-    };
-
     this.hashTag = hashTag;
     this.map = mapGame;
     this.mapImage = mapImage;
     this.theme = theme;
     this.nbInstructions = 0;
+
+    this.bug = {
+        x: 1,
+        y: 1,
+        d: this.TOP
+    };
 }
+
+Challenge.prototype.initBug = function() {
+    this.bug = {
+        x: 1,
+        y: 1,
+        d: this.TOP
+    };
+    this.nbInstructions = 0;
+};
 
 Challenge.prototype.moveBugForward = function (nbMove) {
     switch (this.bug.d) {
@@ -58,6 +67,7 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 };
 
 Challenge.prototype.tryChallenge = function (instructions) {
+    this.initBug();
     twitter_parser.parseInstructions(instructions, new ChallengeListener(this));
     return {
         win : (this.map[this.bug.y-1][this.bug.x-1]) == this.GOAL,
