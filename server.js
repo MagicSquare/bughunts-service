@@ -32,5 +32,4 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function(req, res, n
     });
 });
 
-
 app.listen(8111);
