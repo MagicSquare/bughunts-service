@@ -6,12 +6,13 @@ var should = require('should'),
 
 var map = null;
 var bug = null;
-var challenge = new Challenge(challengeData.hashTag, challengeData.map);
+var challenge = null;
 
 describe('challenge', function () {
     describe('moveBug', function () {
         beforeEach(function(done) {
 
+            challenge = challenge = new Challenge(challengeData.hashTag, challengeData.map);
             challenge.bug.x = 1;
             challenge.bug.y = 1;
             challenge.bug.d = challenge.TOP;
@@ -109,22 +110,22 @@ describe('challenge', function () {
         });
 
         it('should win when the bug reaches the goal', function (done) {
-            challenge.tryChallenge('RI FO FO RI FO').should.be.equal(true);
+            challenge.tryChallenge('RI FO FO RI FO').win.should.be.equal(true);
             done();
         });
 
         it('should win when the bug reaches the goal (parameter version)', function (done) {
-            challenge.tryChallenge('RI FO 2 RI FO').should.be.equal(true);
+            challenge.tryChallenge('RI FO 2 RI FO').win.should.be.equal(true);
             done();
         });
 
         it('should loose when the bug use all instructions without reaching the goal', function (done) {
-            challenge.tryChallenge('RI FO FO').should.be.equal(false);
+            challenge.tryChallenge('RI FO FO').win.should.be.equal(false);
             done();
         });
 
-        it.skip('should return number of move when the goal is reached', function (done) {
-
+        it('should return number of instructions when the goal is reached', function (done) {
+            challenge.tryChallenge('RI FO FO RI FO').nbInstructions.should.be.equal(5);
             done();
         });
 
