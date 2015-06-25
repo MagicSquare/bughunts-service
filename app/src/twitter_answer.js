@@ -45,7 +45,7 @@ exports.listen = function (challenge) {
                     if (!error) {
                         var parameters = {
                             // Reply to the current tweet
-                            status: '@' + tweet.user.name + ' ' + message,
+                            status: '@' + tweet.user.screen_name + ' ' + message,
                             in_reply_to_status_id: tweet.id_str,
                             media_ids: media.media_id_string // Pass the media id string
                         };
