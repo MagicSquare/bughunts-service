@@ -13,9 +13,9 @@ exports.listen = function (challenge) {
             var message;
             var result = challenge.tryChallenge(instructions);
             if (result.win) {
-                message = "Bravo ! vous avez réussi le challenge " + challenge.hashTag + ". Score : " + result.score;
+                message = "Congratulations ! You won the challenge " + challenge.hashTag + ". Your score is : " + result.score;
             } else {
-                message = "Raté...";
+                message = "The bug didn't succeed, try again...";
             }
 
             var nbX = challenge.map.length;
