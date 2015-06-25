@@ -1,14 +1,10 @@
-var twitter_credentials = require('../res/twitter_credentials');
-
 exports.extractInstructions = function (tweet) {
-    // TODO extract twitter account from credentials
-//    var tweetData = tweet.text.match(/@bugshunt_dev (#\S*) (.*)/);
-    var tweetData = tweet.text.match(/@BugHunts (#\S*) (.*)/);
-
+    // ex: '@BugsHunt #0x4242 FO RI FO RI'
+    var tweetData = tweet.text.match(/(@\S*) (#\S*) (.*)/);
     if (tweetData){
         return {
-            challenge: tweetData[1],
-            instructions : tweetData[2]
+            challenge: tweetData[2],
+            instructions : tweetData[3]
         };
     }else{
         return null;
