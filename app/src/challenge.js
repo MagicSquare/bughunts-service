@@ -50,7 +50,7 @@ Challenge.prototype.moveBugForward = function (nbMove) {
             this.bug.x = this.bug.x - nbMove;
             break;
     }
-    this.nbCases += nbMove;
+    this.nbCases += Math.abs(nbMove);
 };
 
 Challenge.prototype.moveBugBackward = function (nbMove) {
