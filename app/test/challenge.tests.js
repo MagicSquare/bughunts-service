@@ -136,12 +136,27 @@ describe('challenge', function () {
             done();
         });
 
-        it.skip('should loose when the bug hit a stone moving forward', function (done) {
+        it('should loose when the bug hit a stone moving forward', function (done) {
+            // BOTTOM
             challengeStone.tryChallenge('FO FO RI FO FO').win.should.be.equal(false);
+            // TOP
+            challengeStone.tryChallenge('RI FO 4 LE FO 2 LE FO 2').win.should.be.equal(false);
+            // RIGHT
+            challengeStone.tryChallenge('RI FO 2 LE FO 2').win.should.be.equal(false);
+            // LEFT
+            challengeStone.tryChallenge('FO 4 RI FO 2 RI FO 2').win.should.be.equal(false);
+
             done();
         });
-        it.skip('should loose when the bug hit a stone moving backward', function (done) {
-            challengeStone.tryChallenge('RI FO LE FO LE LE BA 2 RI BA').win.should.be.equal(false);
+        it('should loose when the bug hit a stone moving backward', function (done) {
+            // BOTTOM
+            challengeStone.tryChallenge('FO FO LE BA BA').win.should.be.equal(false);
+            // TOP
+            challengeStone.tryChallenge('RI FO 4 LE FO 2 RI BA 2').win.should.be.equal(false);
+            // RIGHT
+            challengeStone.tryChallenge('RI FO 2 RI BA 2').win.should.be.equal(false);
+            // LEFT
+            challengeStone.tryChallenge('FO 4 RI FO 2 LE BA 2').win.should.be.equal(false);
             done();
         });
     })

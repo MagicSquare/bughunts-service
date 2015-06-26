@@ -10,6 +10,7 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
 
     this.GOAL = 'g';
     this.EMPTY = 'o';
+    this.STONE = 's';
 
     this.hashTag = hashTag;
     this.map = mapGame;
@@ -17,6 +18,7 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
     this.theme = theme;
     this.nbInstructions = 0;
     this.nbCases = 0;
+    this.stoneHit = false;
 
     this.bug = {
         x: 1,
@@ -25,7 +27,7 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
     };
 }
 
-Challenge.prototype.initBug = function() {
+Challenge.prototype.initBug = function () {
     this.bug = {
         x: 1,
         y: 1,
@@ -33,20 +35,73 @@ Challenge.prototype.initBug = function() {
     };
     this.nbInstructions = 0;
     this.nbCases = 0;
+    this.stoneHit = false;
+};
+
+Challenge.prototype.pointIsOnMap = function (x, y) {
+    var result = (y > 0 && y < this.map.length);
+    if (result === false) {
+        return false;
+    }
+    return (x > 0 && x < this.map[0].length)
 };
 
 Challenge.prototype.moveBugForward = function (nbMove) {
     switch (this.bug.d) {
         case this.TOP:
+            for (var i = 1; i <= Math.abs(nbMove); i++) {
+                var newY = this.bug.y - i;
+                if (nbMove < 0) {
+                    newY = this.bug.y + i;
+                }
+                if (this.pointIsOnMap(this.bug.x - 1, newY - 1)) {
+                    if (this.map[newY - 1][this.bug.x - 1] == this.STONE) {
+                        this.stoneHit = true;
+                    }
+                }
+            }
             this.bug.y = this.bug.y - nbMove;
             break;
         case this.RIGHT:
+            for (var i = 1; i <= Math.abs(nbMove); i++) {
+                var newX = this.bug.x + i;
+                if (nbMove < 0) {
+                    newX = this.bug.x - i;
+                }
+                if (this.pointIsOnMap(newX - 1, this.bug.y - 1)) {
+                    if (this.map[this.bug.y - 1][newX - 1] == this.STONE) {
+                        this.stoneHit = true;
+                    }
+                }
+            }
             this.bug.x = this.bug.x + nbMove;
             break;
         case this.BOTTOM:
+            for (var i = 1; i <= Math.abs(nbMove); i++) {
+                var newY = this.bug.y + i;
+                if (nbMove < 0) {
+                    newY = this.bug.y - i;
+                }
+                if (this.pointIsOnMap(this.bug.x - 1, newY - 1)) {
+                    if (this.map[newY - 1][this.bug.x - 1] == this.STONE) {
+                        this.stoneHit = true;
+                    }
+                }
+            }
             this.bug.y = this.bug.y + nbMove;
             break;
         case this.LEFT:
+            for (var i = 1; i <= Math.abs(nbMove); i++) {
+                var newX = this.bug.x - i;
+                if (nbMove < 0) {
+                    newX = this.bug.x + i;
+                }
+                if (this.pointIsOnMap(newX - 1, this.bug.y - 1)) {
+                    if (this.map[this.bug.y - 1][newX - 1] == this.STONE) {
+                        this.stoneHit = true;
+                    }
+                }
+            }
             this.bug.x = this.bug.x - nbMove;
             break;
     }
@@ -77,18 +132,18 @@ Challenge.prototype.tryChallenge = function (instructions) {
 
     var score = new Big(0);
     if (this.nbInstructions > 0 && this.nbCases > 0) {
-        score = new Big(((1/this.nbInstructions)*100) * ((1/this.nbCases)*100));
+        score = new Big(((1 / this.nbInstructions) * 100) * ((1 / this.nbCases) * 100));
     }
     var win = false;
     try {
-        win = (this.map[this.bug.y-1][this.bug.x-1]) == this.GOAL;
-    } catch(e) {
+        win = (this.map[this.bug.y - 1][this.bug.x - 1]) == this.GOAL;
+    } catch (e) {
         win = false;
     }
 
     return {
-        win : win,
-        score : score.toFixed(2)
+        win: win && (!this.stoneHit),
+        score: score.toFixed(2)
     };
 };
 
