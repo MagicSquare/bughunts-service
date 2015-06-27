@@ -1,5 +1,6 @@
 var Twitter = require('twitter'),
-    twitter_credentials = require('../res/twitter_credentials');
+    twitter_credentials = require('../res/twitter_credentials'),
+    followersBlackList = require('../res/followers_blacklist');
 
 exports.ask = function (challenge) {
 
@@ -17,12 +18,25 @@ exports.ask = function (challenge) {
                 }
             });
 
-            /*var followersParameters = {
-
+            var followersListParameters = {
+                screen_name: twitter_credentials.botAccount.slice(1) // remove @
             };
-            client.get('followers/list', followersParameters, function(followers) {
-                console.log(followers);
-            });*/
+            client.get('followers/list', followersListParameters, function(error, result) {
+                var followersToPush = result.users.filter(function(follower) {
+                    return followersBlackList.blacklist.indexOf(follower.screen_name) === -1;
+                });
+                followersToPush.map(function(follower) {
+                    var followersPushParameters = {
+                        screen_name: follower.screen_name,
+                        text: 'Be the first to solve the new challenge : ' + challenge.hashTag + ' (Reply STOP to unsubscribe)'
+                    };
+                    client.post('direct_messages/new', followersPushParameters, function(error) {
+                       if (error) {
+                           console.log(error);
+                       }
+                    });
+                });
+            });
 
         } else {
             console.log(error);
