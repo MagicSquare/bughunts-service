@@ -18,8 +18,8 @@ exports.listen = function (challenge) {
                 message = "The bug didn't succeed, try again...";
             }
 
-            var nbX = challenge.map.length;
-            var nbY = challenge.map[0].length;
+            var nbY = challenge.map.length;
+            var nbX = challenge.map[0].length;
             var mapString = '';
             challenge.map.map(function (line) {
                 line.map(function (square) {
