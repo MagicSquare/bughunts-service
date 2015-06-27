@@ -1,5 +1,20 @@
 # README #
 
+### Define environment mode
+Define environment mode by setting the environment variable BUGSBOT_ENVIRONMENT.
+ex: export BUGSBOT_ENVIRONMENT=PRODUCTION
+
+By default, the development mode is used.
+
+Possible values:
+- 'PRODUCTION' : launch BugsBot in production mode
+- everything else : launch BugsBot in development mode
+
+### Define port
+The port used by BugsBot could be define by setting the environment variable BUGSBOT_PORT.
+
+By default, the port 8111 is used.
+
 ### Post a new challenge
 
 *server_ip*:8111/newChallenge/*name*/*nbX*/*nbY*/*theme*/*squares*

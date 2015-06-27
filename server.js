@@ -4,13 +4,17 @@ var RestClient = require('node-rest-client').Client,
     twitter_question = require('./app/src/twitter_question'),
     express = require('express');
 
+if (process.env.BUGSBOT_ENVIRONMENT === undefined || process.env.BUGSBOT_ENVIRONMENT === null || process.env.BUGSBOT_ENVIRONMENT !== 'PRODUCTION') {
+    process.env.BUGSBOT_ENVIRONMENT = 'DEV';
+}
+
 var app = express();
 
 function extractMapArray(mapGame, nbX, nbY) {
     var mapArray = [];
     for (var y = 0; y < nbY; y++) {
         var mapLine = [];
-        var line = mapGame.substring(y * nbX, (y+1) * nbX);
+        var line = mapGame.substring(y * nbX, (y + 1) * nbX);
         for (var i = 0; i < line.length; i++) {
             mapLine.push(line[i]);
         }
@@ -19,9 +23,9 @@ function extractMapArray(mapGame, nbX, nbY) {
     return mapArray;
 }
 
-app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function(req, res, next) {
+app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, next) {
     var mapClient = new RestClient();
-    mapClient.get('http://151.80.235.36:8000/' + req.params.nbX + '/' + req.params.nbY +'/' + req.params.theme + '/' + req.params.mapGame, function (data, response) {
+    mapClient.get('http://151.80.235.36:8000/' + req.params.nbX + '/' + req.params.nbY + '/' + req.params.theme + '/' + req.params.mapGame, function (data, response) {
         var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
         var challenge = new Challenge('#' + req.params.hashtag, mapArray, data, req.params.theme);
 
@@ -32,4 +36,6 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function(req, res, n
     });
 });
 
-app.listen(8111);
+var port = process.env.BUGSBOT_PORT || 8111;
+console.log('BugsBot started with environment ' + process.env.BUGSBOT_ENVIRONMENT + ' on port ' + port);
+app.listen(port);
