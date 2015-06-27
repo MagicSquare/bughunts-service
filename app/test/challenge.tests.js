@@ -3,18 +3,21 @@
 var should = require('should'),
     Challenge = require('../src/challenge'),
     challengeTestData = require('./res/challenge_test'),
-    challengeStoneData = require('./res/challenge_stone');
+    challengeStoneData = require('./res/challenge_stone'),
+    challenge0XTEST2Data = require('./res/challenge_0xTEST2');
 
 var map = null;
 var bug = null;
 var challenge = null;
 var challengeStone = null;
+var challenge0xTEST2 = null;
 
 describe('challenge', function () {
     describe('moveBug', function () {
         beforeEach(function(done) {
             challenge = new Challenge(challengeTestData.hashTag, challengeTestData.map);
             challengeStone = new Challenge(challengeStoneData.hashTag, challengeStoneData.map);
+            challenge0xTEST2 = new Challenge(challenge0XTEST2Data.hashTag, challenge0XTEST2Data.map);
             done();
         });
 
@@ -148,6 +151,7 @@ describe('challenge', function () {
 
             done();
         });
+
         it('should loose when the bug hit a stone moving backward', function (done) {
             // BOTTOM
             challengeStone.tryChallenge('FO FO LE BA BA').win.should.be.equal(false);
@@ -157,6 +161,11 @@ describe('challenge', function () {
             challengeStone.tryChallenge('RI FO 2 RI BA 2').win.should.be.equal(false);
             // LEFT
             challengeStone.tryChallenge('FO 4 RI FO 2 LE BA 2').win.should.be.equal(false);
+            done();
+        });
+
+        it('should loose when the bug hit a stone in challenge 0xTEST2', function (done) {
+            challenge0xTEST2.tryChallenge('RI FO 4 LE FO').win.should.be.equal(false);
             done();
         });
     })

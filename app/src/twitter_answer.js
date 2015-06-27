@@ -10,8 +10,8 @@ exports.listen = function (challenge) {
         stream.on('data', function (tweet) {
             var instructions = twitter_extractor.extractInstructions(tweet).instructions;
 
-            var message;
             var result = challenge.tryChallenge(instructions);
+            var message;
             if (result.win) {
                 message = "Congratulations ! You won the challenge " + challenge.hashTag + ". Your score is : " + result.score;
             } else {

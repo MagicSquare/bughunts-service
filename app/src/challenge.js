@@ -39,18 +39,21 @@ Challenge.prototype.initBug = function () {
 };
 
 Challenge.prototype.pointIsOnMap = function (x, y) {
-    var result = (y > 0 && y < this.map.length);
+    var result = (y >= 0 && y < this.map.length);
     if (result === false) {
         return false;
     }
-    return (x > 0 && x < this.map[0].length)
+    return (x >= 0 && x < this.map[0].length);
 };
 
 Challenge.prototype.moveBugForward = function (nbMove) {
+    var i = null,
+        newX = null,
+        newY = null;
     switch (this.bug.d) {
         case this.TOP:
-            for (var i = 1; i <= Math.abs(nbMove); i++) {
-                var newY = this.bug.y - i;
+            for (i = 1; i <= Math.abs(nbMove); i++) {
+                newY = this.bug.y - i;
                 if (nbMove < 0) {
                     newY = this.bug.y + i;
                 }
@@ -63,8 +66,8 @@ Challenge.prototype.moveBugForward = function (nbMove) {
             this.bug.y = this.bug.y - nbMove;
             break;
         case this.RIGHT:
-            for (var i = 1; i <= Math.abs(nbMove); i++) {
-                var newX = this.bug.x + i;
+            for (i = 1; i <= Math.abs(nbMove); i++) {
+                newX = this.bug.x + i;
                 if (nbMove < 0) {
                     newX = this.bug.x - i;
                 }
@@ -77,8 +80,8 @@ Challenge.prototype.moveBugForward = function (nbMove) {
             this.bug.x = this.bug.x + nbMove;
             break;
         case this.BOTTOM:
-            for (var i = 1; i <= Math.abs(nbMove); i++) {
-                var newY = this.bug.y + i;
+            for (i = 1; i <= Math.abs(nbMove); i++) {
+                newY = this.bug.y + i;
                 if (nbMove < 0) {
                     newY = this.bug.y - i;
                 }
@@ -91,8 +94,8 @@ Challenge.prototype.moveBugForward = function (nbMove) {
             this.bug.y = this.bug.y + nbMove;
             break;
         case this.LEFT:
-            for (var i = 1; i <= Math.abs(nbMove); i++) {
-                var newX = this.bug.x - i;
+            for (i = 1; i <= Math.abs(nbMove); i++) {
+                newX = this.bug.x - i;
                 if (nbMove < 0) {
                     newX = this.bug.x + i;
                 }
