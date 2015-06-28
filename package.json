@@ -15,6 +15,8 @@
     "express": "^4.13.0",
     "grunt-cli": "~0.1.13",
     "grunt-exec": "^0.4.6",
+    "mongodb": "^1.4.38",
+    "mongoskin": "^1.4.13",
     "node-rest-client": "^1.5.1",
     "twitter": "latest"
   },

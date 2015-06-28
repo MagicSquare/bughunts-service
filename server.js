@@ -1,5 +1,6 @@
 var RestClient = require('node-rest-client').Client,
     Challenge = require('./app/src/challenge'),
+    ChallengeService = require('./app/src/challengeService'),
     twitter_answer = require('./app/src/twitter_answer'),
     twitter_question = require('./app/src/twitter_question'),
     express = require('express');
@@ -35,6 +36,8 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
         res.type('png').send(data);
     });
 });
+
+ChallengeService.getCurrentChallenge(twitter_answer.listen);
 
 var port = process.env.BUGSBOT_PORT || 8111;
 console.log('BugsBot started with environment ' + process.env.BUGSBOT_ENVIRONMENT + ' on port ' + port);

@@ -4,7 +4,7 @@ var Twitter = require('twitter'),
     twitter_credentials = require('../res/twitter_credentials');
 
 exports.listen = function (challenge) {
-
+    console.log('Listening challenge ' + challenge.hashTag);
     var client = new Twitter(twitter_credentials.credentials);
     client.stream('statuses/filter', {track: twitter_credentials.botAccount + ' ' + challenge.hashTag}, function (stream) {
         stream.on('data', function (tweet) {
