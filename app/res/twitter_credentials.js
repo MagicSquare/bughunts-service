@@ -7,6 +7,7 @@ if (process.env.BUGSBOT_ENVIRONMENT === 'PRODUCTION') {
         access_token_secret: 'Zbo6Dr1WzXamwvigIQR10SeaXhEwZ1e3szQ3W6FdwGEQx'
     };
     exports.botAccount = '@BugHunts';
+    exports.db = 'mongodb://bugsBot:BugsB6t2615M6gIcSquar3@localhost:27017/bugsbot?authSource=bugsbot&ssl=true'
 } else {
     exports.credentials = {
         // bugshunt_dev
@@ -16,4 +17,5 @@ if (process.env.BUGSBOT_ENVIRONMENT === 'PRODUCTION') {
         access_token_secret: 'pQu6Vit7sNKzNpqjeKQ0Gndd8u6B3b7JC8niKCgHTBZ7e'
     };
     exports.botAccount = '@bugshunt_dev';
+    exports.db = 'mongodb://localhost:27017/bugsbot'
 }
