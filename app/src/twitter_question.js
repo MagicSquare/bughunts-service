@@ -41,6 +41,8 @@ exports.ask = function (challenge) {
                             if (error) {
                                 console.log(error);
                                 return;
+                            } else {
+                                console.log('Notification sent to ' + follower.screen_name);
                             }
                         });
                     });

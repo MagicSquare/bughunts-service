@@ -1,4 +1,7 @@
 exports.blacklist = [
     'nicolas_gouy',
-    'TeamMagicSquare'
+    'TeamMagicSquare',
+    'kidk',
+    'mortyZZ',
+    'domgetter'
 ];
