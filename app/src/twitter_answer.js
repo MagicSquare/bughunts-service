@@ -9,6 +9,9 @@ exports.listen = function (challenge) {
     client.stream('statuses/filter', {track: twitter_credentials.botAccount + ' ' + challenge.hashTag}, function (stream) {
         stream.on('data', function (tweet) {
             var instructions = twitter_extractor.extractInstructions(tweet).instructions;
+            if (instructions === null) {
+                return;
+            }
 
             var result = challenge.tryChallenge(instructions);
             var message;
