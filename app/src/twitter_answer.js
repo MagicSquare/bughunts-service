@@ -1,7 +1,8 @@
 var Twitter = require('twitter'),
     RestClient = require('node-rest-client').Client,
     twitter_extractor = require('./twitter_extractor'),
-    twitter_credentials = require('../res/twitter_credentials');
+    twitter_credentials = require('../res/twitter_credentials'),
+    ChallengeService = require('./challengeService');
 
 exports.listen = function (challenge) {
     console.log('Listening challenge ' + challenge.hashTag);
@@ -16,6 +17,7 @@ exports.listen = function (challenge) {
             var result = challenge.tryChallenge(instructions);
             var message;
             if (result.win) {
+                ChallengeService.playerSolvedChallenge(challenge.hashTag, tweet.user.screen_name, result.score);
                 message = "Congratulations ! You won the challenge " + challenge.hashTag + ". Your score is : " + result.score;
             } else {
                 message = "The bug didn't succeed, try again...";

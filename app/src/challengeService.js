@@ -43,3 +43,36 @@ exports.getCurrentChallenge = function (callback) {
         callback(challenge);
     });
 };
+
+exports.playerSolvedChallenge = function(challengeHashtag, player, score) {
+    db.challenge.update({hashTag: challengeHashtag}, {'$push': {players: {name: player, score: score}}}, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.getHighscores = function(challengeHashtag, callback) {
+    db.challenge.find({hashTag: challengeHashtag}).toArray(function (err, challenges) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        if (challenges.length === 0) {
+            console.log('No challenge found for highscores !');
+            return;
+        }
+        var challenge = challenges[0];
+        var highscores = challenge.players;
+        highscores.sort(function(p1, p2) {
+            if (p1.score > p2.score) {
+                return -1;
+            }
+            if (p1.score < p2.score) {
+                return 1;
+            }
+            return 0;
+        });
+        callback(highscores);
+    });
+};

@@ -37,6 +37,12 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
     });
 });
 
+app.get('/highscores/:hashtag', function (req, res, next) {
+    ChallengeService.getHighscores('#' + req.params.hashtag, function(highscores) {
+        res.json(highscores);
+    });
+});
+
 ChallengeService.getCurrentChallenge(twitter_answer.listen);
 
 var port = process.env.BUGSBOT_PORT || 8111;
