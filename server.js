@@ -37,7 +37,7 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
     });
 });
 
-app.get('/highscores', function (req, res, next) {
+app.get('/challenges', function (req, res, next) {
     ChallengeService.getChallenges(function(challenges) {
         res.jsonp(challenges);
     });
