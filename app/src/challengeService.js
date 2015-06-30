@@ -73,10 +73,10 @@ exports.getHighscores = function(challengeHashtag, callback) {
         }
         var highscores = challenge.players;
         highscores.sort(function(p1, p2) {
-            if (p1.score > p2.score) {
+            if (parseFloat(p1.score) > parseFloat(p2.score)) {
                 return -1;
             }
-            if (p1.score < p2.score) {
+            if (parseFloat(p1.score) < parseFloat(p2.score)) {
                 return 1;
             }
             return 0;
