@@ -76,3 +76,13 @@ exports.getHighscores = function(challengeHashtag, callback) {
         callback(highscores);
     });
 };
+
+exports.getChallenges = function(callback) {
+    db.challenge.find({}, {hashTag: 1, _id: 0}).toArray(function(err, challenges) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        callback(challenges);
+    });
+};

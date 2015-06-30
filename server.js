@@ -37,6 +37,12 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
     });
 });
 
+app.get('/highscores', function (req, res, next) {
+    ChallengeService.getChallenges(function(challenges) {
+        res.json(challenges);
+    });
+});
+
 app.get('/highscores/:hashtag', function (req, res, next) {
     ChallengeService.getHighscores('#' + req.params.hashtag, function(highscores) {
         res.json(highscores);
