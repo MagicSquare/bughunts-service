@@ -53,16 +53,24 @@ exports.playerSolvedChallenge = function(challengeHashtag, player, score) {
 };
 
 exports.getHighscores = function(challengeHashtag, callback) {
+    function error(msg, error) {
+        console.log(msg + ((typeof error === 'undefined')? '' : ': ' + error) );
+        callback({error: msg});
+    }
     db.challenge.find({hashTag: challengeHashtag}).toArray(function (err, challenges) {
         if (err) {
-            console.log(err);
+            error('Error when loading highscores', err);
             return;
         }
         if (challenges.length === 0) {
-            console.log('No challenge found for highscores !');
+            error('No challenge found for highscores !');
             return;
         }
         var challenge = challenges[0];
+        if (typeof challenge.players === 'undefined') {
+            error('No players on this challenge');
+            return;
+        }
         var highscores = challenge.players;
         highscores.sort(function(p1, p2) {
             if (p1.score > p2.score) {
