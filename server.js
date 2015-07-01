@@ -3,6 +3,7 @@ var RestClient = require('node-rest-client').Client,
     ChallengeService = require('./app/src/challengeService'),
     twitter_answer = require('./app/src/twitter_answer'),
     twitter_question = require('./app/src/twitter_question'),
+    CommandService = require('./app/src/commandService'),
     express = require('express');
 
 if (process.env.BUGSBOT_ENVIRONMENT === undefined || process.env.BUGSBOT_ENVIRONMENT === null || process.env.BUGSBOT_ENVIRONMENT !== 'PRODUCTION') {
@@ -49,7 +50,16 @@ app.get('/highscores/:hashtag', function (req, res, next) {
     });
 });
 
-ChallengeService.getCurrentChallenge(twitter_answer.listen);
+app.get('/command/:message', function (req, res, next) {
+    CommandService.executeLastChallenge(req.params.message, function(result) {
+        res.jsonp(result);
+    });
+});
+
+ChallengeService.getCurrentChallenge(function challengeCallback(challenge) {
+    twitter_answer.listen(challenge);
+    CommandService.listen(challenge);
+});
 
 var port = process.env.BUGSBOT_PORT || 8111;
 console.log('BugsBot started with environment ' + process.env.BUGSBOT_ENVIRONMENT + ' on port ' + port);
