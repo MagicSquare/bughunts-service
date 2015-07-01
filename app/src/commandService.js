@@ -48,7 +48,7 @@ exports.execute = function execute(challenge, command) {
             expandedInstructions += splittedInstructions[i] + ';';
         }
     }
-    output.image = 'http://151.80.235.36:8000/' + nbX + '/' + nbY + '/' + challenge.theme + '/' + mapString + '/' + expandedInstructions;
+    output.image = 'http://151.80.235.36:8000/beta/res/' + nbX + ':' + nbY + '/theme/' + challenge.theme + '/map/' + mapString + '/cmd/' + expandedInstructions;
     
     return output;
     
