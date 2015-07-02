@@ -33,6 +33,7 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
 
         twitter_question.ask(challenge);
         twitter_answer.listen(challenge);
+        CommandService.listen(challenge);
 
         res.type('png').send(data);
     });
