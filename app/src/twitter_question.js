@@ -3,6 +3,37 @@ var Twitter = require('twitter'),
     followersBlackList = require('../res/followers_blacklist'),
     ChallengeService = require('./challengeService');
 
+function pushFollowers(cursor, client, hashTag, callback) {
+    var followersListParameters = {
+        screen_name: twitter_credentials.botAccount.slice(1), // remove @
+        cursor: cursor
+    };
+    client.get('followers/list', followersListParameters, function (error, result) {
+        if (error || result.errors || result.message) {
+            console.log(error);
+            callback(0);
+        }
+        cursor = result.nextCursor;
+        var followersToPush = result.users.filter(function (follower) {
+            return followersBlackList.blacklist.indexOf(follower.screen_name) === -1;
+        });
+        followersToPush.map(function (follower) {
+            var followersPushParameters = {
+                screen_name: follower.screen_name,
+                text: 'Be the first to solve the new challenge : ' + hashTag + ' (Reply STOP to unsubscribe)'
+            };
+            client.post('direct_messages/new', followersPushParameters, function (error) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Notification sent to ' + follower.screen_name);
+                }
+            });
+        });
+        callback(cursor);
+    });
+}
+
 exports.ask = function (challenge) {
 
     var client = new Twitter(twitter_credentials.credentials);
@@ -21,32 +52,19 @@ exports.ask = function (challenge) {
                 console.log(error);
                 return;
             }
+
             ChallengeService.registerChallenge(challenge, function (err) {
                 if (err) {
                     return;
                 }
-                var followersListParameters = {
-                    screen_name: twitter_credentials.botAccount.slice(1) // remove @
-                };
-                client.get('followers/list', followersListParameters, function (error, result) {
-                    var followersToPush = result.users.filter(function (follower) {
-                        return followersBlackList.blacklist.indexOf(follower.screen_name) === -1;
+                function pushFollowersLoop(cursor) {
+                    pushFollowers(cursor, client, challenge.hashTag, function (cursor) {
+                        if (cursor !== 0 && cursor !== null && cursor !== undefined) {
+                            pushFollowersLoop(cursor);
+                        }
                     });
-                    followersToPush.map(function (follower) {
-                        var followersPushParameters = {
-                            screen_name: follower.screen_name,
-                            text: 'Be the first to solve the new challenge : ' + challenge.hashTag + ' (Reply STOP to unsubscribe)'
-                        };
-                        client.post('direct_messages/new', followersPushParameters, function (error) {
-                            if (error) {
-                                console.log(error);
-                                return;
-                            } else {
-                                console.log('Notification sent to ' + follower.screen_name);
-                            }
-                        });
-                    });
-                });
+                }
+                pushFollowersLoop(-1);
             });
         });
     });
