@@ -36,19 +36,7 @@ exports.execute = function execute(challenge, command) {
         });
     });
 
-    var splittedInstructions = instructions.split(' ');
-    var expandedInstructions = '';
-    for (var i = 0; i < splittedInstructions.length; i++) {
-        if (!isNaN(splittedInstructions[i])) {
-            var parameter = parseInt(splittedInstructions[i]) - 1;
-            for (var c = 0; c < parameter; c++) {
-                expandedInstructions += splittedInstructions[i-1] + ';';
-            }
-        } else {
-            expandedInstructions += splittedInstructions[i] + ';';
-        }
-    }
-    output.image = 'http://151.80.235.36:8000/beta/res/' + nbX + ':' + nbY + '/theme/' + challenge.theme + '/map/' + mapString + '/cmd/' + expandedInstructions;
+    output.image = 'http://151.80.235.36:8000/beta/res/' + nbX + ':' + nbY + '/theme/' + challenge.theme + '/map/' + mapString + '/cmd/' + result.finalIntructions;
     
     return output;
     
