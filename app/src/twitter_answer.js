@@ -8,7 +8,7 @@ var Twitter = require('twitter'),
 exports.listen = function (challenge) {
     console.log('Listening challenge ' + challenge.hashTag);
     var client = new Twitter(twitter_credentials.credentials);
-    client.stream('statuses/filter', {track: twitter_credentials.botAccount + ' ' + challenge.hashTag}, function (stream) {
+    client.stream('statuses/filter', {track: twitter_credentials.botAccount}, function (stream) {
         stream.on('data', function (tweet) {
             var instructions = twitter_extractor.extractInstructions(tweet).instructions;
             if (instructions === null) {
