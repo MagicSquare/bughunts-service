@@ -96,8 +96,8 @@ describe('challenge', function () {
         });
 
         it('should make the bug move backward when instruction is BA', function (done) {
-            challenge.tryChallenge('FO BA');
-            challenge.bug.x.should.be.equal(1);
+            challenge.tryChallenge('FO FO BA');
+            challenge.bug.x.should.be.equal(2);
             done();
         });
 
@@ -143,7 +143,7 @@ describe('challenge', function () {
             // BOTTOM
             challengeStone.tryChallenge('FO FO RI FO FO').win.should.be.equal(false);
             // TOP
-            challengeStone.tryChallenge('RI FO 4 LE FO 2 LE FO 2').win.should.be.equal(false);
+            challengeStone.tryChallenge('RI FO 4 LE FO 2 LE FO 2').win.should.be.equal(false);
             // RIGHT
             challengeStone.tryChallenge('RI FO 2 LE FO 2').win.should.be.equal(false);
             // LEFT
@@ -156,7 +156,7 @@ describe('challenge', function () {
             // BOTTOM
             challengeStone.tryChallenge('FO FO LE BA BA').win.should.be.equal(false);
             // TOP
-            challengeStone.tryChallenge('RI FO 4 LE FO 2 RI BA 2').win.should.be.equal(false);
+            challengeStone.tryChallenge('RI FO 4 LE FO 2 RI BA 2').win.should.be.equal(false);
             // RIGHT
             challengeStone.tryChallenge('RI FO 2 RI BA 2').win.should.be.equal(false);
             // LEFT
