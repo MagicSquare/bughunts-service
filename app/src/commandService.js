@@ -1,4 +1,5 @@
-var ChallengeService = require('./challengeService');
+var ChallengeService = require('./challengeService'),
+    images = require('../res/images_config');
     
 var challenge = null;
 
@@ -36,7 +37,7 @@ exports.execute = function execute(challenge, command) {
         });
     });
 
-    output.image = 'http://151.80.235.36:8000/beta/res/' + nbX + ':' + nbY + '/theme/' + challenge.theme + '/map/' + mapString + '/cmd/' + result.finalIntructions;
+    output.image = images.config.host + '/v2/res/' + nbX + ':' + nbY + '/theme/' + challenge.theme + '/map/' + mapString + '/cmd/' + result.finalIntructions + '/type' + images.config.responseType;
     
     return output;
     

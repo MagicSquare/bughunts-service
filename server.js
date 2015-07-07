@@ -4,6 +4,7 @@ var RestClient = require('node-rest-client').Client,
     twitter_answer = require('./app/src/twitter_answer'),
     twitter_question = require('./app/src/twitter_question'),
     CommandService = require('./app/src/commandService'),
+    images = require('./app/res/images_config'),
     express = require('express');
 
 if (process.env.BUGSBOT_ENVIRONMENT === undefined || process.env.BUGSBOT_ENVIRONMENT === null || process.env.BUGSBOT_ENVIRONMENT !== 'PRODUCTION') {
@@ -27,7 +28,7 @@ function extractMapArray(mapGame, nbX, nbY) {
 
 app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, next) {
     var mapClient = new RestClient();
-    mapClient.get('http://151.80.235.36:8000/' + req.params.nbX + '/' + req.params.nbY + '/' + req.params.theme + '/' + req.params.mapGame, function (data, response) {
+    mapClient.get(images.config.host + '/v2/res/' + req.params.nbX + ':' + req.params.nbY + '/theme/' + req.params.theme + '/map/' + req.params.mapGame + '/rules/true', function (data, response) {
         var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
         var challenge = new Challenge('#' + req.params.hashtag, mapArray, data, req.params.theme);
 
