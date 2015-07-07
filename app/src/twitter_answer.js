@@ -2,7 +2,8 @@ var Twitter = require('twitter'),
     RestClient = require('node-rest-client').Client,
     twitter_extractor = require('./twitter_extractor'),
     twitter_credentials = require('../res/twitter_credentials'),
-    ChallengeService = require('./challengeService');
+    ChallengeService = require('./challengeService'),
+    commandService = require('./commandService');
 
 exports.listen = function (challenge) {
     console.log('Listening challenge ' + challenge.hashTag);
@@ -13,44 +14,20 @@ exports.listen = function (challenge) {
             if (instructions === null) {
                 return;
             }
-
-            var result = challenge.tryChallenge(instructions);
-            var message;
-            if (result.win) {
-                ChallengeService.playerSolvedChallenge(challenge.hashTag, tweet.user.screen_name, result.score);
-                message = "Congratulations ! You won the challenge " + challenge.hashTag + ". Your score is : " + result.score;
-            } else {
-                message = "The bug didn't succeed, try again...";
+            
+            var result = commandService.execute(challenge, instructions);
+            
+            if(result.win) {
+              ChallengeService.playerSolvedChallenge(challenge.hashTag, tweet.user.screen_name, result.score);
             }
-
-            var nbY = challenge.map.length;
-            var nbX = challenge.map[0].length;
-            var mapString = '';
-            challenge.map.map(function (line) {
-                line.map(function (square) {
-                    mapString += square;
-                });
-            });
-
-            var splittedInstructions = instructions.split(' ');
-            var expandedInstructions = '';
-            for (var i = 0; i < splittedInstructions.length; i++) {
-                if (!isNaN(splittedInstructions[i])) {
-                    var parameter = parseInt(splittedInstructions[i]) - 1;
-                    for (var c = 0; c < parameter; c++) {
-                        expandedInstructions += splittedInstructions[i-1] + ';';
-                    }
-                } else {
-                    expandedInstructions += splittedInstructions[i] + ';';
-                }
-            }
+            
             var mapClient = new RestClient();
-            mapClient.get('http://151.80.235.36:8000/' + nbX + '/' + nbY + '/' + challenge.theme + '/' + mapString + '/' + expandedInstructions, function (data, response) {
+            mapClient.get(result.image, function (data, response) {
                 client.post('media/upload', {media: data}, function (error, media, response) {
                     if (!error) {
                         var parameters = {
                             // Reply to the current tweet
-                            status: '@' + tweet.user.screen_name + ' ' + message,
+                            status: '@' + tweet.user.screen_name + ' ' + result.message,
                             in_reply_to_status_id: tweet.id_str,
                             media_ids: media.media_id_string // Pass the media id string
                         };
