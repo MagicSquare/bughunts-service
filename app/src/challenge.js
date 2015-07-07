@@ -40,6 +40,7 @@ Challenge.prototype.initBug = function () {
         y: 1,
         d: this.DIR_RIGHT
     };
+    this.finalIntructions = [];
     this.nbInstructions = 0;
     this.nbCases = 0;
 };
