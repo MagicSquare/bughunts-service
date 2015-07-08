@@ -1,10 +1,10 @@
-var twitter_parser = require('./twitter_parser'),
-    ChallengeListener = require('./challengeListener').ChallengeListener,
+var LadyBug = require('bughunts-lang').LadyBug;
     Big = require('big.js');
 
 var STONE_EXCEPTION = "Encountered a stone";
 
 function Challenge(hashTag, mapGame, mapImage, theme) {
+
     this.DIR_TOP = 0;
     this.DIR_RIGHT = 1;
     this.DIR_BOTTOM = 2;
@@ -54,6 +54,7 @@ Challenge.prototype.pointIsOnMap = function (x, y) {
 };
 
 Challenge.prototype.moveBugForward = function (nbMove) {
+    this.nbInstructions++; 
     var i = null,
         newX = null,
         newY = null;
@@ -129,10 +130,12 @@ Challenge.prototype.moveBugForward = function (nbMove) {
 };
 
 Challenge.prototype.moveBugBackward = function (nbMove) {
+    this.nbInstructions++;
     this.moveBugForward(-nbMove);
 };
 
 Challenge.prototype.turnBugLeft = function (nbMove) {
+    this.nbInstructions++;
     var newD = this.bug.d - nbMove;
     if (newD < 0) {
         this.bug.d = 4 + newD % 4;
@@ -145,6 +148,7 @@ Challenge.prototype.turnBugLeft = function (nbMove) {
 };
 
 Challenge.prototype.turnBugRight = function (nbMove) {
+    this.nbInstructions++;
     this.bug.d = (this.bug.d + nbMove) % 4;
     for (var i=0; i<nbMove; i++){
         this.finalIntructions.push(this.INSTRUCTION_RIGHT);
@@ -153,8 +157,22 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 
 Challenge.prototype.tryChallenge = function (instructions) {
     this.initBug();
-    try{
-        twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
+    
+    var moveBugForward = function(instance) { return function(times) { instance.moveBugForward(times); } };
+    var moveBackward = function(instance) { return function(times) { instance.moveBugBackward(times); } };
+    var turnBugLeft = function(instance) { return function(times) { instance.turnBugLeft(times); } };
+    var turnBugRight = function(instance) { return function(times) { instance.turnBugRight(times); } };
+
+    var l = new LadyBug({
+      onMoveForward:  moveBugForward(this),
+      onMoveBackward: moveBackward(this),
+      onTurnLeft:     turnBugLeft(this),
+      onTurnRight:    turnBugRight(this)
+    });
+
+    try{        
+        //twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
+        l.run(instructions.toUpperCase());
     }catch(e){
         console.log("exeption "+e);
     }
