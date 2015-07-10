@@ -1,14 +1,16 @@
-var LadyBug = require('bughunts-lang').LadyBug;
-    Big = require('big.js');
+var LadyBug = require('bughunts-lang').LadyBug,
+    Big = require('big.js'),
+    Point = require('./point');
 
-var STONE_EXCEPTION = "Encountered a stone";
+var STONE_EXCEPTION = {type: 'stone', msg: "Encountered a stone"},
+    OUTSIDE_MAP_EXCEPTION = {type: 'ouside', msg: "Outside of the map"};
 
 function Challenge(hashTag, mapGame, mapImage, theme) {
 
-    this.DIR_TOP = 0;
-    this.DIR_RIGHT = 1;
-    this.DIR_BOTTOM = 2;
-    this.DIR_LEFT = 3;
+    this.DIR_TOP = new Point(0, -1);
+    this.DIR_RIGHT = new Point(1, 0);
+    this.DIR_BOTTOM = new Point(0, 1);
+    this.DIR_LEFT = new Point(-1, 0);
 
     this.INSTRUCTION_FORWARD = 'FO';
     this.INSTRUCTION_BACKWARD = 'BA';
@@ -28,105 +30,54 @@ function Challenge(hashTag, mapGame, mapImage, theme) {
     this.nbCases = 0;
 
     this.bug = {
-        x: 1,
-        y: 1,
-        d: this.DIR_RIGHT
+        pos: new Point(0, 0),
+        dir: this.DIR_RIGHT.clone()
     };
 }
 
 Challenge.prototype.initBug = function () {
     this.bug = {
-        x: 1,
-        y: 1,
-        d: this.DIR_RIGHT
+        pos: new Point(0, 0),
+        dir: this.DIR_RIGHT.clone()
     };
     this.finalIntructions = [];
     this.nbInstructions = 0;
     this.nbCases = 0;
 };
 
-Challenge.prototype.pointIsOnMap = function (x, y) {
-    var result = (y >= 0 && y < this.map.length);
-    if (result === false) {
-        return false;
-    }
-    return (x >= 0 && x < this.map[0].length);
+Challenge.prototype.pointIsOnMap = function (point) {
+    return(
+        point.y >= 0 && point.y < this.map.length &&
+        point.x >= 0 && point.x < this.map[0].length
+    );
 };
 
 Challenge.prototype.moveBugForward = function (nbMove) {
     this.nbInstructions++; 
-    var i = null,
-        newX = null,
-        newY = null;
-    var instruction;
-    if (nbMove > 0) {
-        instruction = this.INSTRUCTION_FORWARD;
-    }else{
-        instruction = this.INSTRUCTION_BACKWARD;
+
+    var multiplier = nbMove / Math.abs(nbMove), // 1 if forward, -1 if backward
+        pos = this.bug.pos.clone(),
+        dir = this.bug.dir.mulN(multiplier), // Invert the direction if backward
+        instruction = multiplier > 0 ? this.INSTRUCTION_FORWARD : this.INSTRUCTION_BACKWARD;
+
+    for (var i = 0; i < Math.abs(nbMove); i++) {
+
+        // Move the bug
+        pos.add(dir);
+
+        // Check if the point is on the map and is available
+        if (!this.pointIsOnMap(pos)) {
+            throw OUTSIDE_MAP_EXCEPTION;
+        }
+        if (this.map[pos.y][pos.x] == this.STONE) {
+            throw STONE_EXCEPTION;
+        }
+
+        this.finalIntructions.push(instruction);
+        this.nbCases++;
+        this.bug.pos.set(pos);
+
     }
-    switch (this.bug.d) {
-        case this.DIR_TOP:
-            for (i = 1; i <= Math.abs(nbMove); i++) {
-                newY = this.bug.y - i;
-                if (nbMove < 0) {
-                    newY = this.bug.y + i;
-                }
-                if (this.pointIsOnMap(this.bug.x - 1, newY - 1)) {
-                    if (this.map[newY - 1][this.bug.x - 1] == this.STONE) {
-                        throw STONE_EXCEPTION;
-                    }
-                }
-                this.finalIntructions.push(instruction);
-            }
-            this.bug.y = this.bug.y - nbMove;
-            break;
-        case this.DIR_RIGHT:
-            for (i = 1; i <= Math.abs(nbMove); i++) {
-                newX = this.bug.x + i;
-                if (nbMove < 0) {
-                    newX = this.bug.x - i;
-                }
-                if (this.pointIsOnMap(newX - 1, this.bug.y - 1)) {
-                    if (this.map[this.bug.y - 1][newX - 1] == this.STONE) {
-                        throw STONE_EXCEPTION;
-                    }
-                }
-                this.finalIntructions.push(instruction);
-            }
-            this.bug.x = this.bug.x + nbMove;
-            break;
-        case this.DIR_BOTTOM:
-            for (i = 1; i <= Math.abs(nbMove); i++) {
-                newY = this.bug.y + i;
-                if (nbMove < 0) {
-                    newY = this.bug.y - i;
-                }
-                if (this.pointIsOnMap(this.bug.x - 1, newY - 1)) {
-                    if (this.map[newY - 1][this.bug.x - 1] == this.STONE) {
-                        throw STONE_EXCEPTION;
-                    }
-                }
-                this.finalIntructions.push(instruction);
-            }
-            this.bug.y = this.bug.y + nbMove;
-            break;
-        case this.DIR_LEFT:
-            for (i = 1; i <= Math.abs(nbMove); i++) {
-                newX = this.bug.x - i;
-                if (nbMove < 0) {
-                    newX = this.bug.x + i;
-                }
-                if (this.pointIsOnMap(newX - 1, this.bug.y - 1)) {
-                    if (this.map[this.bug.y - 1][newX - 1] == this.STONE) {
-                        throw STONE_EXCEPTION;
-                    }
-                }
-                this.finalIntructions.push(instruction);
-            }
-            this.bug.x = this.bug.x - nbMove;
-            break;
-    }
-    this.nbCases += Math.abs(nbMove);
 };
 
 Challenge.prototype.moveBugBackward = function (nbMove) {
@@ -135,21 +86,18 @@ Challenge.prototype.moveBugBackward = function (nbMove) {
 
 Challenge.prototype.turnBugLeft = function (nbMove) {
     this.nbInstructions++;
-    var newD = this.bug.d - nbMove;
-    if (newD < 0) {
-        this.bug.d = 4 + newD % 4;
-    } else {
-        this.bug.d = newD;
-    }
-    for (var i=0; i<nbMove; i++){
+
+    for (var i = 0; i < nbMove; i++) {
+        this.bug.dir.invert().mul(1, -1); // Equivalent to the 2*2 rotation matrix
         this.finalIntructions.push(this.INSTRUCTION_LEFT);
     }
 };
 
 Challenge.prototype.turnBugRight = function (nbMove) {
     this.nbInstructions++;
-    this.bug.d = (this.bug.d + nbMove) % 4;
-    for (var i=0; i<nbMove; i++){
+
+    for (var i = 0; i < nbMove; i++) {
+        this.bug.dir.invert().mul(-1, 1); // Equivalent to the 2*2 rotation matrix
         this.finalIntructions.push(this.INSTRUCTION_RIGHT);
     }
 };
@@ -157,6 +105,7 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 Challenge.prototype.tryChallenge = function (instructions) {
     this.initBug();
     var self = this;
+    var isOutsideMap = false;
 
     var l = new LadyBug({
       onMoveForward:  function(times) {self.moveBugForward(times);},
@@ -166,10 +115,10 @@ Challenge.prototype.tryChallenge = function (instructions) {
     });
 
     try{
-        //twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
         l.run(instructions.toUpperCase());
     }catch(e){
-        console.log("exeption "+e);
+        console.log("exeption "+e.msg);
+        isOutsideMap = e.type === 'outside';
     }
 
     var score = new Big(0);
@@ -178,7 +127,7 @@ Challenge.prototype.tryChallenge = function (instructions) {
     }
     var win = false;
     try {
-        win = (this.map[this.bug.y - 1][this.bug.x - 1]) == this.GOAL;
+        win = !isOutsideMap && (this.map[this.bug.pos.y][this.bug.pos.x]) == this.GOAL;
     } catch (e) {
         win = false;
     }

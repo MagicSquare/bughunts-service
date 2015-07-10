@@ -23,93 +23,99 @@ describe('challenge', function () {
 
         it('should be able to make the bug move forward', function (done) {
             challenge.moveBugForward(1);
-            challenge.bug.x.should.be.equal(2);
+            challenge.bug.pos.x.should.be.equal(1);
 
-            challenge.bug.d = challenge.DIR_BOTTOM;
+            challenge.bug.dir.set(challenge.DIR_BOTTOM);
             challenge.moveBugForward(1);
-            challenge.bug.y.should.be.equal(2);
+            challenge.bug.pos.y.should.be.equal(1);
 
-            challenge.bug.d = challenge.DIR_LEFT;
+            challenge.bug.dir.set(challenge.DIR_LEFT);
             challenge.moveBugForward(1);
-            challenge.bug.x.should.be.equal(1);
+            challenge.bug.pos.x.should.be.equal(0);
 
-            challenge.bug.d = challenge.DIR_TOP;
+            challenge.bug.dir.set(challenge.DIR_TOP);
             challenge.moveBugForward(1);
-            challenge.bug.y.should.be.equal(1);
+            challenge.bug.pos.y.should.be.equal(0);
 
             done();
         });
 
         it('should make the bug move forward several times', function (done) {
             challenge.moveBugForward(3);
-            challenge.bug.x.should.be.equal(4);
+            challenge.bug.pos.x.should.be.equal(3);
             done();
         });
 
         it('should be able to make the bug move backward', function (done) {
-            challenge.bug.d = challenge.DIR_LEFT;
+            challenge.bug.dir.set(challenge.DIR_LEFT);
             challenge.moveBugBackward(1);
-            challenge.bug.x.should.be.equal(2);
+            challenge.bug.pos.x.should.be.equal(1);
 
-            challenge.bug.d = challenge.DIR_TOP;
+            challenge.bug.dir.set(challenge.DIR_TOP);
             challenge.moveBugBackward(1);
-            challenge.bug.y.should.be.equal(2);
+            challenge.bug.pos.y.should.be.equal(1);
 
-            challenge.bug.d = challenge.DIR_RIGHT;
+            challenge.bug.dir.set(challenge.DIR_RIGHT);
             challenge.moveBugBackward(1);
-            challenge.bug.x.should.be.equal(1);
+            challenge.bug.pos.x.should.be.equal(0);
 
-            challenge.bug.d = challenge.DIR_BOTTOM;
+            challenge.bug.dir.set(challenge.DIR_BOTTOM);
             challenge.moveBugBackward(1);
-            challenge.bug.y.should.be.equal(1);
+            challenge.bug.pos.y.should.be.equal(0);
 
             done();
         });
 
         it('should make the bug move backward several times', function (done) {
-            challenge.bug.d = challenge.DIR_TOP;
+            challenge.bug.dir.set(challenge.DIR_TOP);
             challenge.moveBugBackward(3);
-            challenge.bug.y.should.be.equal(4);
+            challenge.bug.pos.y.should.be.equal(3);
             done();
         });
 
         it('should be able to make the bug turn', function (done) {
             challenge.turnBugLeft(1);
-            challenge.bug.d.should.be.equal(challenge.DIR_TOP);
+            challenge.bug.dir.x.should.be.equal(challenge.DIR_TOP.x);
+            challenge.bug.dir.y.should.be.equal(challenge.DIR_TOP.y);
             challenge.turnBugRight(1);
-            challenge.bug.d.should.be.equal(challenge.DIR_RIGHT);
+            challenge.bug.dir.x.should.be.equal(challenge.DIR_RIGHT.x);
+            challenge.bug.dir.y.should.be.equal(challenge.DIR_RIGHT.y);
             done();
         });
 
         it('should make the bug turn several times', function (done) {
             challenge.turnBugLeft(10);
-            challenge.bug.d.should.be.equal(challenge.DIR_LEFT);
+            challenge.bug.dir.x.should.be.equal(challenge.DIR_LEFT.x);
+            challenge.bug.dir.y.should.be.equal(challenge.DIR_LEFT.y);
             challenge.turnBugRight(10);
-            challenge.bug.d.should.be.equal(challenge.DIR_RIGHT);
+            challenge.bug.dir.x.should.be.equal(challenge.DIR_RIGHT.x);
+            challenge.bug.dir.y.should.be.equal(challenge.DIR_RIGHT.y);
             done();
         });
 
         it('should make the bug move forward when instruction is FO', function (done) {
             challenge.tryChallenge('FO');
-            challenge.bug.x.should.be.equal(2);
+            challenge.bug.pos.x.should.be.equal(1);
             done();
         });
 
         it('should make the bug move backward when instruction is BA', function (done) {
-            challenge.tryChallenge('FO FO BA');
-            challenge.bug.x.should.be.equal(2);
+            challenge.tryChallenge('FO 3 BA');
+            challenge.bug.pos.x.should.be.equal(2);
             done();
         });
 
         it('should make the bug turn left when instruction is LE', function (done) {
             challenge.tryChallenge('LE');
-            challenge.bug.d.should.be.equal(challenge.DIR_TOP);
+            challenge.bug.dir.x.should.be.equal(challenge.DIR_TOP.x);
+            challenge.bug.dir.y.should.be.equal(challenge.DIR_TOP.y);
             done();
         });
 
         it('should make the bug turn right when instruction is RI', function (done) {
             challenge.tryChallenge('RI');
-            challenge.bug.d.should.be.equal(challenge.DIR_BOTTOM);
+            challenge.bug.dir.x.should.be.equal(challenge.DIR_BOTTOM.x);
+            challenge.bug.dir.y.should.be.equal(challenge.DIR_BOTTOM.y);
             done();
         });
 
@@ -175,19 +181,20 @@ describe('challenge', function () {
         });
 
         it('should return the actual instructions used', function (done) {
-            challenge.tryChallenge('FO FO 3 RI RI 5 LE LE 4 BA BA 2').finalIntructions.should.be.equal('FO;FO;FO;FO;RI;RI;RI;RI;RI;RI;LE;LE;LE;LE;LE;BA;BA;BA');
+            challenge.tryChallenge('FO FO 3 RI RI 5 LE LE 2 BA BA 2').finalIntructions.should.be.equal('FO;FO;FO;FO;RI;RI;RI;RI;RI;RI;LE;LE;LE;BA;BA;BA');
             done();
         });
 
         it('should stop when the bug hit a stone', function (done) {
             challengeStone.tryChallenge('RI FO LE FO 3 RI FO').finalIntructions.should.be.equal('RI;FO;LE;FO');
-            challengeStone.bug.y.should.be.equal(2);
-            challengeStone.bug.y.should.be.equal(2);
+            challengeStone.bug.pos.x.should.be.equal(1);
+            challengeStone.bug.pos.y.should.be.equal(1);
             done();
         });
 
-        it.skip('should loose when the bug goes out of the map', function (done) {
-
+        it('should loose when the bug goes out of the map', function (done) {
+            challengeStone.tryChallenge('BA').win.should.be.equal(false);
+            done();
         });
     })
 });
