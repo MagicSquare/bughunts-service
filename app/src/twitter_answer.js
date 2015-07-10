@@ -5,8 +5,8 @@ var Twitter = require('twitter'),
     ChallengeService = require('./challengeService'),
     commandService = require('./commandService');
 
-exports.listen = function (challenge) {
-    console.log('Listening challenge ' + challenge.hashTag);
+exports.listen = function (game) {
+    console.log('Listening challenge ' + game.hashTag);
     var client = new Twitter(twitter_credentials.credentials);
     client.stream('statuses/filter', {track: twitter_credentials.botAccount}, function (stream) {
         stream.on('data', function (tweet) {
@@ -15,10 +15,10 @@ exports.listen = function (challenge) {
                 return;
             }
             
-            var result = commandService.execute(challenge, instructions);
+            var result = commandService.execute(game, instructions);
             
             if(result.win) {
-              ChallengeService.playerSolvedChallenge(challenge.hashTag, tweet.user.screen_name, result.score);
+              ChallengeService.playerSolvedChallenge(game.hashTag, tweet.user.screen_name, result.score);
             }
             
             var mapClient = new RestClient();
