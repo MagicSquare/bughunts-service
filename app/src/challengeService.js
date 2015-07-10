@@ -1,7 +1,6 @@
 var mongo = require('mongoskin'),
     Challenge = require('./challenge'),
-    config = require('../res/config'),
-    twitter_credentials = require('../res/twitter_credentials');
+    config = require('../res/config');
 
 var db = mongo.db(config.db, {native_parser: true});
 db.bind('challenge');
