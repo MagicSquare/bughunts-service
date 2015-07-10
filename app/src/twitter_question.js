@@ -34,16 +34,16 @@ function pushFollowers(cursor, client, hashTag, callback) {
     });
 }
 
-exports.ask = function (challenge) {
+exports.ask = function (game) {
 
     var client = new Twitter(twitter_credentials.credentials);
-    client.post('media/upload', {media: challenge.mapImage}, function (error, media, response) {
+    client.post('media/upload', {media: game.mapImage}, function (error, media, response) {
         if (error) {
             console.log(error);
             return;
         }
         var postAllParameters = {
-            status: 'New challenge : ' + challenge.hashTag,
+            status: 'New challenge : ' + game.hashTag,
             media_ids: media.media_id_string // Pass the media id string
         };
 
@@ -53,12 +53,12 @@ exports.ask = function (challenge) {
                 return;
             }
 
-            ChallengeService.registerChallenge(challenge, function (err) {
+            ChallengeService.registerChallenge(game, function (err) {
                 if (err) {
                     return;
                 }
                 function pushFollowersLoop(cursor) {
-                    pushFollowers(cursor, client, challenge.hashTag, function (cursor) {
+                    pushFollowers(cursor, client, game.hashTag, function (cursor) {
                         if (cursor !== 0 && cursor !== null && cursor !== undefined) {
                             pushFollowersLoop(cursor);
                         }
