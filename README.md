@@ -1,23 +1,42 @@
-# README #
+# Bughunts service #
 
-### Define environment mode
-Define environment mode by setting the environment variable BUGSBOT_ENVIRONMENT.
-ex: export BUGSBOT_ENVIRONMENT=PRODUCTION
+This service serves bughunts data as challenges and scores. It is able to play a challenge with a command by returning a result.
 
-By default, the development mode is used.
+It is also able to listen twitter stream and automatically reply.
 
-Possible values:
-- 'PRODUCTION' : launch BugsBot in production mode
-- everything else : launch BugsBot in development mode
+### Setting up ###
 
-### Define port
-The port used by BugsBot could be define by setting the environment variable BUGSBOT_PORT.
+    npm install
 
-By default, the port 8111 is used.
+### Environments variables
+
+* BUGHUNTS_SRV_PORT: Port used by the service (default 8111)
+
+* BUGHUNTS_SRV_DB: Url of the mongodb database (default mongodb://localhost:27017/bughunts)
+
+* BUGHUNTS_SRV_TWITTER_LISTEN: Listen or not twitter stream (default FALSE)
+
+Example:
+
+    export BUGHUNTS_SRV_PORT=8111
+    export BUGHUNTS_SRV_DB=mongodb://localhost:27017/bughunts
+    export BUGHUNTS_SRV_TWITTER_LISTEN=false
+
+### Twitter credentials
+
+In order to listen twitter stream, you need to set the environment variable to TRUE and add a file app/res/twitter_credentials with your twitter application credentials:
+
+    exports.credentials = {
+        consumer_key: '',
+        consumer_secret: '',
+        access_token_key: '',
+        access_token_secret: ''
+    };
+    exports.botAccount = '@yourtwittername';
 
 ### Post a new challenge
 
-*server_ip*:8111/newChallenge/*name*/*nbX*/*nbY*/*theme*/*squares*
+{server_ip}:{serve_port}/newChallenge/*name*/*nbX*/*nbY*/*theme*/*squares*
 
 - name: name of challenge that will be used in hashtag (don't prefix it with \#)
 
