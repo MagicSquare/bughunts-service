@@ -19,7 +19,7 @@
     "mongoskin": "^1.4.13",
     "node-rest-client": "^1.5.1",
     "twitter": "latest",
-    "bughunts-lang": "git+https://bitbucket.org/danielpetisme/bughunts-lang.git"
+    "bughunts-lang": "git+https://github.com/MagicSquare/bughunts-lang.git"
   },
   "devDependencies": {
     "grunt-concurrent": "~1.0.0",
