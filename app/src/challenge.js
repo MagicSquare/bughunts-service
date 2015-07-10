@@ -130,7 +130,6 @@ Challenge.prototype.moveBugForward = function (nbMove) {
 };
 
 Challenge.prototype.moveBugBackward = function (nbMove) {
-    this.nbInstructions++;
     this.moveBugForward(-nbMove);
 };
 
@@ -157,20 +156,16 @@ Challenge.prototype.turnBugRight = function (nbMove) {
 
 Challenge.prototype.tryChallenge = function (instructions) {
     this.initBug();
-    
-    var moveBugForward = function(instance) { return function(times) { instance.moveBugForward(times); } };
-    var moveBackward = function(instance) { return function(times) { instance.moveBugBackward(times); } };
-    var turnBugLeft = function(instance) { return function(times) { instance.turnBugLeft(times); } };
-    var turnBugRight = function(instance) { return function(times) { instance.turnBugRight(times); } };
+    var self = this;
 
     var l = new LadyBug({
-      onMoveForward:  moveBugForward(this),
-      onMoveBackward: moveBackward(this),
-      onTurnLeft:     turnBugLeft(this),
-      onTurnRight:    turnBugRight(this)
+      onMoveForward:  function(times) {self.moveBugForward(times);},
+      onMoveBackward: function(times) {self.moveBugBackward(times);},
+      onTurnLeft:     function(times) {self.turnBugLeft(times);},
+      onTurnRight:    function(times) {self.turnBugRight(times);}
     });
 
-    try{        
+    try{
         //twitter_parser.parseInstructions(instructions.toUpperCase(), new ChallengeListener(this));
         l.run(instructions.toUpperCase());
     }catch(e){
