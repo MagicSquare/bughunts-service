@@ -1,11 +1,17 @@
 var RestClient = require('node-rest-client').Client,
     Challenge = require('./app/src/challenge'),
     ChallengeService = require('./app/src/challengeService'),
-    twitter_answer = require('./app/src/twitter_answer'),
-    twitter_question = require('./app/src/twitter_question'),
     CommandService = require('./app/src/commandService'),
     images = require('./app/res/images_config'),
-    express = require('express');
+    config = require('./app/res/config'),
+    express = require('express'),
+    twitter_answer = null,
+    twitter_question = null;
+
+if(config.listenTwitter) {
+    twitter_answer = require('./app/src/twitter_answer');
+    twitter_question = require('./app/src/twitter_question');
+}
 
 if (process.env.BUGSBOT_ENVIRONMENT === undefined || process.env.BUGSBOT_ENVIRONMENT === null || process.env.BUGSBOT_ENVIRONMENT !== 'PRODUCTION') {
     process.env.BUGSBOT_ENVIRONMENT = 'DEV';
@@ -32,8 +38,10 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
         var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
         var challenge = new Challenge('#' + req.params.hashtag, mapArray, data, req.params.theme);
 
-        twitter_question.ask(challenge);
-        twitter_answer.listen(challenge);
+        if(config.listenTwitter) {
+            twitter_question.ask(challenge);
+            twitter_answer.listen(challenge);
+        }
         CommandService.listen(challenge);
 
         res.type('png').send(data);
@@ -59,10 +67,11 @@ app.get('/command/:message', function (req, res, next) {
 });
 
 ChallengeService.getCurrentChallenge(function challengeCallback(challenge) {
-    twitter_answer.listen(challenge);
+    if(config.listenTwitter) {
+        twitter_answer.listen(challenge);
+    }
     CommandService.listen(challenge);
 });
 
-var port = process.env.BUGSBOT_PORT || 8111;
-console.log('BugsBot started with environment ' + process.env.BUGSBOT_ENVIRONMENT + ' on port ' + port);
-app.listen(port);
+console.log('BugHunts service started on port ' + config.port);
+app.listen(config.port);
