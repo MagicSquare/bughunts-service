@@ -1,5 +1,5 @@
 {
-  "name": "twitter_bot",
+  "name": "bughunts-twitter-bot",
   "version": "0.0.1",
   "engines": {
     "node": "0.12.x",
@@ -18,7 +18,8 @@
     "mongodb": "^1.4.38",
     "mongoskin": "^1.4.13",
     "node-rest-client": "^1.5.1",
-    "twitter": "latest"
+    "twitter": "latest",
+    "bughunts-lang": "git+https://bitbucket.org/danielpetisme/bughunts-lang.git"
   },
   "devDependencies": {
     "grunt-concurrent": "~1.0.0",
