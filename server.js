@@ -1,5 +1,5 @@
 var RestClient = require('node-rest-client').Client,
-    Challenge = require('./app/src/challenge'),
+    challenge = require('bughunts-challenge'),
     ChallengeService = require('./app/src/challengeService'),
     CommandService = require('./app/src/commandService'),
     images = require('./app/res/images_config'),
@@ -36,13 +36,13 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
     var mapClient = new RestClient();
     mapClient.get(images.config.host + '/v2/res/' + req.params.nbX + ':' + req.params.nbY + '/theme/' + req.params.theme + '/map/' + req.params.mapGame + '/rules/true', function (data, response) {
         var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
-        var challenge = new Challenge('#' + req.params.hashtag, mapArray, data, req.params.theme);
+        var game = new challenge.Game('#' + req.params.hashtag, mapArray, data, req.params.theme);
 
         if(config.listenTwitter) {
-            twitter_question.ask(challenge);
-            twitter_answer.listen(challenge);
+            twitter_question.ask(game);
+            twitter_answer.listen(game);
         }
-        CommandService.listen(challenge);
+        CommandService.listen(game);
 
         res.type('png').send(data);
     });
@@ -66,11 +66,11 @@ app.get('/command/:message', function (req, res, next) {
     });
 });
 
-ChallengeService.getCurrentChallenge(function challengeCallback(challenge) {
+ChallengeService.getCurrentChallenge(function challengeCallback(game) {
     if(config.listenTwitter) {
-        twitter_answer.listen(challenge);
+        twitter_answer.listen(game);
     }
-    CommandService.listen(challenge);
+    CommandService.listen(game);
 });
 
 console.log('BugHunts service started on port ' + config.port);

@@ -1,9 +1,9 @@
 var ChallengeService = require('./challengeService'),
     images = require('../res/images_config');
     
-var challenge = null;
+var game = null;
 
-exports.execute = function execute(challenge, command) {
+exports.execute = function execute(game, command) {
 
     var output = {
       command: command,
@@ -11,7 +11,7 @@ exports.execute = function execute(challenge, command) {
       win: null,
       score: null,
       image: null,
-      challenge: challenge.hashTag
+      challenge: game.hashTag
     };
 
     var instructions = command;
@@ -19,25 +19,25 @@ exports.execute = function execute(challenge, command) {
         return;
     }
 
-    var result = challenge.tryChallenge(instructions);
+    var result = game.tryChallenge(instructions);
     output.win = result.win;
     output.score = result.score;
     if (result.win) {
-        output.message = "Congratulations ! You won the challenge " + challenge.hashTag + ". Your score is : " + result.score;
+        output.message = "Congratulations ! You won the challenge " + game.hashTag + ". Your score is : " + result.score;
     } else {
         output.message = "The bug didn't succeed, try again...";
     }
 
-    var nbY = challenge.map.length;
-    var nbX = challenge.map[0].length;
+    var nbY = game.map.length;
+    var nbX = game.map[0].length;
     var mapString = '';
-    challenge.map.map(function (line) {
+    game.map.map(function (line) {
         line.map(function (square) {
             mapString += square;
         });
     });
 
-    output.image = images.config.host + '/v2/res/' + nbX + ':' + nbY + '/theme/' + challenge.theme + '/map/' + mapString + '/cmd/' + result.finalIntructions + '/type/' + images.config.responseType;
+    output.image = images.config.host + '/v2/res/' + nbX + ':' + nbY + '/theme/' + game.theme + '/map/' + mapString + '/cmd/' + result.finalIntructions + '/type/' + images.config.responseType;
     
     return output;
     
@@ -45,14 +45,14 @@ exports.execute = function execute(challenge, command) {
 
 exports.executeLastChallenge = function execute(command, callback) {
     
-    if(challenge === null) {
+    if(game === null) {
       callback({error: 'No challenge found'});
       return;
     }
     
-    callback(exports.execute(challenge, command));
+    callback(exports.execute(game, command));
 };
 
 exports.listen = function listen(newChallenge) {
-  challenge = newChallenge;
+  game = newChallenge;
 };

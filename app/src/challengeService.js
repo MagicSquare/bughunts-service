@@ -1,18 +1,18 @@
 var mongo = require('mongoskin'),
-    Challenge = require('./challenge'),
+    challenge = require('bughunts-challenge'),
     config = require('../res/config');
 
 var db = mongo.db(config.db, {native_parser: true});
 db.bind('challenge');
 
 
-exports.registerChallenge = function (challenge, callback) {
+exports.registerChallenge = function (game, callback) {
     db.challenge.insert({
-        hashTag: challenge.hashTag,
+        hashTag: game.hashTag,
         created: Date.now(),
-        mapGame: challenge.map,
-        mapImage: challenge.mapImage,
-        theme: challenge.theme
+        mapGame: game.map,
+        mapImage: game.mapImage,
+        theme: game.theme
     }, function (err, result) {
         if (err) {
             console.log(err);
@@ -20,7 +20,7 @@ exports.registerChallenge = function (challenge, callback) {
 
         }
         if (result.length === 0) {
-            console.log('Error while registering new challenge : ' + challenge.hashTag);
+            console.log('Error while registering new challenge : ' + game.hashTag);
         }
         var challengeData = result[0];
         console.log("New challenge registered : " + challengeData.hashTag);
@@ -39,8 +39,8 @@ exports.getCurrentChallenge = function (callback) {
             return;
         }
         var challengeData = challenges[0];
-        var challenge = new Challenge(challengeData.hashTag, challengeData.mapGame, challengeData.mapImage, challengeData.theme);
-        callback(challenge);
+        var game = new challenge.Game(challengeData.hashTag, challengeData.mapGame, challengeData.mapImage, challengeData.theme);
+        callback(game);
     });
 };
 
@@ -66,12 +66,12 @@ exports.getHighscores = function(challengeHashtag, callback) {
             error('No challenge found for highscores !');
             return;
         }
-        var challenge = challenges[0];
-        if (typeof challenge.players === 'undefined') {
+        var game = challenges[0];
+        if (typeof game.players === 'undefined') {
             error('No players on this challenge');
             return;
         }
-        var highscores = challenge.players;
+        var highscores = game.players;
         highscores.sort(function(p1, p2) {
             if (parseFloat(p1.score) > parseFloat(p2.score)) {
                 return -1;
