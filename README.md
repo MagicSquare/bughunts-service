@@ -1,6 +1,7 @@
 # Bughunts service #
 
 This service serves bughunts data as challenges and scores. It is able to play a challenge with a command by returning a result.
+(The result is based on a dependancy on "bughunts-challenge")
 
 It is also able to listen twitter stream and automatically reply.
 

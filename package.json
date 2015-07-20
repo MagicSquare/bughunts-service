@@ -11,15 +11,16 @@
   },
   "dependencies": {
     "antlr4": "^4.5.2",
+    "bughunts-challenge": "git+https://github.com/MagicSquare/bughunts-challenge.git",
+    "bughunts-lang": "git+https://github.com/MagicSquare/bughunts-lang.git",
     "express": "^4.13.0",
     "grunt-cli": "~0.1.13",
     "grunt-exec": "^0.4.6",
+    "jade": "^1.11.0",
     "mongodb": "^1.4.38",
     "mongoskin": "^1.4.13",
     "node-rest-client": "^1.5.1",
-    "twitter": "latest",
-    "bughunts-lang": "git+https://github.com/MagicSquare/bughunts-lang.git"
-    "bughunts-challenge": "git+https://github.com/MagicSquare/bughunts-challenge.git"
+    "twitter": "latest"
   },
   "devDependencies": {
     "grunt-concurrent": "~1.0.0",

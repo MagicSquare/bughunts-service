@@ -18,6 +18,7 @@ if (process.env.BUGSBOT_ENVIRONMENT === undefined || process.env.BUGSBOT_ENVIRON
 }
 
 var app = express();
+app.set('view engine', 'jade');
 
 function extractMapArray(mapGame, nbX, nbY) {
     var mapArray = [];
@@ -63,6 +64,17 @@ app.get('/highscores/:hashtag', function (req, res, next) {
 app.get('/command/:message', function (req, res, next) {
     CommandService.executeLastChallenge(req.params.message, function(result) {
         res.jsonp(result);
+    });
+});
+
+app.get('/victory/:challenge/:command', function (req, res, next) {
+    CommandService.executeLastChallenge(req.params.command, function(result) {
+        res.render('victory', {
+            url: 'http://lachasseauxbugs.fr/app/victory/'+req.params.challenge+'/'+req.params.command+'/',
+            challenge: result.challenge,
+            message: result.message,
+            image:result.image
+        });
     });
 });
 

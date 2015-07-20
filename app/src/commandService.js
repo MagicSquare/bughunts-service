@@ -37,7 +37,7 @@ exports.execute = function execute(game, command) {
         });
     });
 
-    output.image = images.config.host + '/v2/res/' + nbX + ':' + nbY + '/theme/' + game.theme + '/map/' + mapString + '/cmd/' + result.finalIntructions + '/type/' + images.config.responseType;
+    output.image = images.config.host + '/v2/res/' + nbX + ':' + nbY + '/theme/' + game.theme + '/map/' + mapString + '/cmd/' + result.instructions + '/type/' + images.config.responseType;
     
     return output;
     

@@ -1,0 +1,20 @@
+-var title = 'La Chasse Aux Bugs - ' + challenge
+html
+    head
+        title!= title
+        meta(charset='utf-8')
+        meta(property='og:title', content=title)
+        meta(property='og:site_name', content='La Chasse Aux Bugs')
+        meta(property='og:url', content=url)
+        meta(property='og:description', content=message)
+        meta(property='fb:app_id', content='677207215756382')
+        meta(property='og:type', content='game.victory')
+        meta(property='og:locale', content='fr_FR')
+        meta(property='og:image', content=image)
+
+    body
+        h1!= message
+        div
+            img(src=image)
+            p
+                a(href='https://fr.ulule.com/chasseauxbugs/', target='_blank') Rejoignez nous aussi sur Ulule
