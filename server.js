@@ -70,7 +70,7 @@ app.get('/command/:message', function (req, res, next) {
 app.get('/victory/:challenge/:command', function (req, res, next) {
     CommandService.executeLastChallenge(req.params.command, function(result) {
         res.render('victory', {
-            url: 'http://lachasseauxbugs.fr/service/victory/'+req.params.challenge+'/'+req.params.command+'/',
+            url: 'http://lachasseauxbugs.fr/service/victory/'+encodeURIComponent(req.params.challenge)+'/'+req.params.command+'/',
             challenge: result.challenge,
             message: result.message,
             image:result.image
