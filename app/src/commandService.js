@@ -11,7 +11,9 @@ exports.execute = function execute(game, command) {
       win: null,
       score: null,
       image: null,
-      challenge: game.hashTag
+      challenge: game.hashTag,
+      details: [],
+      map: game.map
     };
 
     var instructions = command;
@@ -22,6 +24,7 @@ exports.execute = function execute(game, command) {
     var result = game.tryChallenge(instructions);
     output.win = result.win;
     output.score = result.score;
+    output.details = result.details;
     if (result.win) {
         output.message = "Congratulations ! You won the challenge " + game.hashTag + ". Your score is : " + result.score;
     } else {
