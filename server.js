@@ -37,7 +37,10 @@ app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, 
     var mapClient = new RestClient();
     mapClient.get(images.config.host + '/v2/res/' + req.params.nbX + ':' + req.params.nbY + '/theme/' + req.params.theme + '/map/' + req.params.mapGame + '/rules/true', function (data, response) {
         var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
-        var game = new challenge.Game('#' + req.params.hashtag, mapArray, data, req.params.theme);
+        var map = new challenge.Map(mapArray[0].length, mapArray.length, mapArray);
+        var game = new challenge.Game('#' + req.params.hashtag, map);
+        game.theme = req.params.theme;
+        game.mapImage = data;
 
         if(config.listenTwitter) {
             twitter_question.ask(game);

@@ -39,7 +39,13 @@ exports.getCurrentChallenge = function (callback) {
             return;
         }
         var challengeData = challenges[0];
-        var game = new challenge.Game(challengeData.hashTag, challengeData.mapGame, challengeData.mapImage, challengeData.theme);
+        var map = challengeData.mapGame;
+        if(map instanceof Array) {
+            map = new challenge.Map(map[0].length, map.length, map);
+        }
+        var game = new challenge.Game(challengeData.hashTag, map);
+        game.mapImage = challengeData.mapImage;
+        game.theme = challengeData.theme;
         callback(game);
     });
 };

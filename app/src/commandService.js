@@ -31,16 +31,12 @@ exports.execute = function execute(game, command) {
         output.message = "The bug didn't succeed, try again...";
     }
 
-    var nbY = game.map.length;
-    var nbX = game.map[0].length;
     var mapString = '';
-    game.map.map(function (line) {
-        line.map(function (square) {
-            mapString += square;
-        });
+    game.map.squares.map(function (square) {
+      mapString += square;
     });
 
-    output.image = images.config.host + '/v2/res/' + nbX + ':' + nbY + '/theme/' + game.theme + '/map/' + mapString + '/cmd/' + result.instructions + '/type/' + images.config.responseType;
+    output.image = images.config.host + '/v2/res/' + game.map.res.x + ':' + game.map.res.y + '/theme/' + game.theme + '/map/' + mapString + '/cmd/' + result.instructions + '/type/' + images.config.responseType;
     
     return output;
     
