@@ -1,5 +1,4 @@
-var RestClient = require('node-rest-client').Client,
-    challenge = require('bughunts-challenge'),
+var challenge = require('bughunts-challenge'),
     ChallengeService = require('./app/src/challengeService'),
     CommandService = require('./app/src/commandService'),
     images = require('./app/res/images_config'),
@@ -20,35 +19,13 @@ if (process.env.BUGSBOT_ENVIRONMENT === undefined || process.env.BUGSBOT_ENVIRON
 var app = express();
 app.set('view engine', 'jade');
 
-function extractMapArray(mapGame, nbX, nbY) {
-    var mapArray = [];
-    for (var y = 0; y < nbY; y++) {
-        var mapLine = [];
-        var line = mapGame.substring(y * nbX, (y + 1) * nbX);
-        for (var i = 0; i < line.length; i++) {
-            mapLine.push(line[i]);
-        }
-        mapArray.push(mapLine);
-    }
-    return mapArray;
-}
-
 app.get('/newChallenge/:hashtag/:nbX/:nbY/:theme/:mapGame', function (req, res, next) {
-    var mapClient = new RestClient();
-    mapClient.get(images.config.host + '/v2/res/' + req.params.nbX + ':' + req.params.nbY + '/theme/' + req.params.theme + '/map/' + req.params.mapGame + '/rules/true', function (data, response) {
-        var mapArray = extractMapArray(req.params.mapGame, req.params.nbX, req.params.nbY);
-        var map = new challenge.Map(mapArray[0].length, mapArray.length, mapArray);
-        var game = new challenge.Game('#' + req.params.hashtag, map);
-        game.theme = req.params.theme;
-        game.mapImage = data;
-
+    CommandService.createGameWithViewer(req.params.hashtag, req.params.nbX, req.params.nbY, req.params.theme, req.params.mapGame, function(data){
         if(config.listenTwitter) {
             twitter_question.ask(game);
             twitter_answer.listen(game);
         }
-        CommandService.listen(game);
-
-        res.type('png').send(data);
+        //res.type('png').send(data);
     });
 });
 
@@ -66,6 +43,12 @@ app.get('/highscores/:hashtag', function (req, res, next) {
 
 app.get('/command/:message', function (req, res, next) {
     CommandService.executeLastChallenge(req.params.message, function(result) {
+        res.jsonp(result);
+    });
+});
+
+app.get('/challenge/:challenge/command/:message', function (req, res, next) {
+    CommandService.executeChallenge(req.params.challenge, req.params.message, function(result) {
         res.jsonp(result);
     });
 });
