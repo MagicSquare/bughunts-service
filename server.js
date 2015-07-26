@@ -47,8 +47,14 @@ app.get('/command/:message', function (req, res, next) {
     });
 });
 
-app.get('/challenge/:challenge/command/:message', function (req, res, next) {
-    CommandService.executeChallenge(req.params.challenge, req.params.message, function(output) {
+app.get('/challenge/:challenge', function (req, res, next) {
+    CommandService.retrieveChallenge(req.params.challenge, function(output) {
+        res.jsonp(output);
+    });
+});
+
+app.get('/challenge/:challenge/command/:command', function (req, res, next) {
+    CommandService.executeChallenge(req.params.challenge, req.params.command, function(output) {
         res.jsonp(output);
     });
 });

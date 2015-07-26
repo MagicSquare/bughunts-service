@@ -16,7 +16,7 @@ describe('command service', function () {
         done();
     });
 
-    it('should return an output with ', function (done) {
+    it('should return the correct output when trying a challenge', function (done) {
         CommandService.executeChallenge('0x0001', 'FO FO', function(output) {
             var expected = {
                 command: ['FO','FO'],
@@ -28,12 +28,27 @@ describe('command service', function () {
                     [{"bug": {"dir": {"x": 1, "y": 0}, "pos": {"x": 2, "y": 2}}, "type": "bug"}],
                     [{"bug": {"dir": {"x": 1, "y": 0}, "pos": {"x": 3, "y": 2}}, "type": "bug"}]
                 ],
-                map: {"actors": [{"dir": {"x": 1, "y": 0}, "pos": {"x": 3, "y": 2}, "type": "l"}],
+                map: {"actors": [{"dir": {"x": 1, "y": 0}, "pos": {"x": 1, "y": 2}, "type": "l"}],
                     "mapSize": 25,
                     "res": {"x": 5, "y": 5},
-                    "squares": ["o", "o", "o", "o", "o", "o", "o", "o", "s", "o", "o", "l", "o", "g", "o", "o", "o", "o", "s", "o", "o", "o", "o", "o", "o"]
-                },
-                theme: 10
+                    "squares": ["o", "o", "o", "o", "o", "o", "o", "o", "s", "o", "o", "l", "o", "g", "o", "o", "o", "o", "s", "o", "o", "o", "o", "o", "o"],
+                    "theme": 10
+                }
+            };
+            output.should.be.eql(expected);
+        });
+        done();
+    });
+
+    it('should return the correct output when retrieving a challenge', function (done) {
+        CommandService.retrieveChallenge('0x0001', function(output) {
+            var expected = {
+                map: {"actors": [{"dir": {"x": 1, "y": 0}, "pos": {"x": 1, "y": 2}, "type": "l"}],
+                    "mapSize": 25,
+                    "res": {"x": 5, "y": 5},
+                    "squares": ["o", "o", "o", "o", "o", "o", "o", "o", "s", "o", "o", "l", "o", "g", "o", "o", "o", "o", "s", "o", "o", "o", "o", "o", "o"],
+                    "theme": 10
+                }
             };
             output.should.be.eql(expected);
         });

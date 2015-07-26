@@ -20,7 +20,7 @@ exports.execute = function(game, command) {
         score: result.score,
         challenge: game.hashTag,
         details: result.details,
-        map: game.map
+        map: game.initialMap
     };
 
     if (result.win) {
@@ -41,21 +41,45 @@ exports.executeLastChallenge = function(command, callback) {
 };
 
 exports.executeChallenge = function (name, command, callback) {
+    var game;
+    try {
+        game = createGame(name);
+    }catch(err){
+        callback({error: err});
+        return;
+    }
+
+    var output = exports.execute(game, command);
+
+    callback(output);
+};
+
+exports.retrieveChallenge = function (name, callback){
+    var game;
+    try {
+        game = createGame(name);
+    }catch(err){
+        callback({error: err});
+        return;
+    }
+
+    var output = {
+        map: game.initialMap
+    };
+
+    callback(output);
+};
+
+createGame = function (name){
     var challengeDetails;
     try{
         challengeDetails = require('../res/challenges/'+name+'.js');
     }catch(err){
-        callback({error: 'No challenge #'+name+' found'});
-        return;
+        throw 'No challenge #'+name+' found';
     }
 
-    var map = new challenge.Map(challengeDetails.squares[0].length, challengeDetails.squares.length, challengeDetails.squares, challengeDetails.actors);
-    var game = new challenge.Game('#' + challengeDetails.name, map);
-
-    var output = exports.execute(game, command);
-
-    output.theme = challengeDetails.theme;
-    callback(output);
+    var map = new challenge.Map(challengeDetails.squares[0].length, challengeDetails.squares.length, challengeDetails.squares, challengeDetails.actors, parseInt(challengeDetails.theme));
+    return new challenge.Game('#' + challengeDetails.name, map);
 };
 
 exports.createGameWithViewer = function(name, nbX, nbY, theme, mapGame, callback){
@@ -65,7 +89,6 @@ exports.createGameWithViewer = function(name, nbX, nbY, theme, mapGame, callback
         var mapArray = extractMapArray(mapGame, nbX, nbY);
         var map = new challenge.Map(mapArray[0].length, mapArray.length, mapArray);
         var game = new challenge.Game('#' + name, map);
-        game.theme = theme;
         game.mapImage = data;
 
         listen(game);
