@@ -48,8 +48,8 @@ app.get('/command/:message', function (req, res, next) {
 });
 
 app.get('/challenge/:challenge/command/:message', function (req, res, next) {
-    CommandService.executeChallenge(req.params.challenge, req.params.message, function(result) {
-        res.jsonp(result);
+    CommandService.executeChallenge(req.params.challenge, req.params.message, function(output) {
+        res.jsonp(output);
     });
 });
 

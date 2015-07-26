@@ -1,22 +1,10 @@
 var ChallengeService = require('./challengeService'),
     challenge = require('bughunts-challenge'),
-    RestClient = require('node-rest-client').Client,
-    images = require('../res/images_config');
+    RestClient = require('node-rest-client').Client;
 
 var game = null;
 
 exports.execute = function(game, command) {
-
-    var output = {
-        command: command,
-        message: null,
-        win: null,
-        score: null,
-        image: null,
-        challenge: game.hashTag,
-        details: [],
-        map: game.map
-    };
 
     var instructions = command;
     if (instructions === null) {
@@ -24,24 +12,22 @@ exports.execute = function(game, command) {
     }
 
     var result = game.tryChallenge(instructions);
-    output.win = result.win;
-    output.score = result.score;
-    output.details = result.details;
+
+    var output = {
+        command: result.instructions,
+        message: "The bug didn't succeed, try again...",
+        win: result.win,
+        score: result.score,
+        challenge: game.hashTag,
+        details: result.details,
+        map: game.map
+    };
+
     if (result.win) {
-        output.message = "Congratulations ! You won the challenge " + game.hashTag + ". Your score is : " + result.score;
-    } else {
-        output.message = "The bug didn't succeed, try again...";
+        output.message = "Congratulations ! You won the challenge " + output.challenge + ". Your score is : " + output.score;
     }
 
-    var mapString = '';
-    game.map.squares.map(function (square) {
-        mapString += square;
-    });
-
-    output.image = images.config.host + '/v2/res/' + game.map.res.x + ':' + game.map.res.y + '/theme/' + game.theme + '/map/' + mapString + '/cmd/' + result.instructions + '/type/' + images.config.responseType;
-
     return output;
-
 };
 
 exports.executeLastChallenge = function(command, callback) {
@@ -54,24 +40,23 @@ exports.executeLastChallenge = function(command, callback) {
     callback(exports.execute(game, command));
 };
 
-exports.executeChallenge = function (challenge, command, callback) {
+exports.executeChallenge = function (name, command, callback) {
+    var challengeDetails;
     try{
-        var challengeDetails = require('../res/challenges/'+challenge+'.js');
+        challengeDetails = require('../res/challenges/'+name+'.js');
     }catch(err){
-        callback({error: 'No challenge found'});
+        callback({error: 'No challenge #'+name+' found'});
         return;
     }
-    var game = createGame(challengeDetails.name, challengeDetails.theme, challengeDetails.squares);
 
-    callback(exports.execute(game, command));
+    var map = new challenge.Map(challengeDetails.squares[0].length, challengeDetails.squares.length, challengeDetails.squares, challengeDetails.actors);
+    var game = new challenge.Game('#' + challengeDetails.name, map);
+
+    var output = exports.execute(game, command);
+
+    output.theme = challengeDetails.theme;
+    callback(output);
 };
-
-createGame = function(name, theme, mapArray){
-    var map = new challenge.Map(mapArray[0].length, mapArray.length, mapArray);
-    var game = new challenge.Game('#' + name, map);
-    game.theme = theme;
-    return game;
-}
 
 exports.createGameWithViewer = function(name, nbX, nbY, theme, mapGame, callback){
     var mapClient = new RestClient();

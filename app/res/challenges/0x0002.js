@@ -1,13 +1,16 @@
 var challenge = require('bughunts-challenge');
 
-var squares = [
+exports.name = '#0x0002';
+
+exports.squares = [
     ['l','1','o','o','o'],
     ['o','o','o','s','o'],
     ['2','o','3','g','s'],
     ['o','o','o','s','o'],
     ['o','o','o','o','o']
 ];
-var actors = [
+
+exports.actors = [
     {
         type: 'l',
         pos: new challenge.Point(0, 0),
@@ -29,5 +32,4 @@ var actors = [
     }
 ];
 
-exports.map = new challenge.Map(5, 5, squares, actors);
-exports.name = '#0x0002';
+exports.theme = 10;
