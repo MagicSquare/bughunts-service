@@ -45,6 +45,7 @@ exports.executeChallenge = function (name, command, callback) {
     try {
         game = createGame(name);
     }catch(err){
+        console.log(err);
         callback({error: err});
         return;
     }
@@ -70,7 +71,7 @@ exports.retrieveChallenge = function (name, callback){
     callback(output);
 };
 
-createGame = function (name){
+function createGame(name){
     var challengeDetails;
     try{
         challengeDetails = require('../res/challenges/'+name+'.js');
@@ -80,7 +81,7 @@ createGame = function (name){
 
     var map = new challenge.Map(challengeDetails.squares[0].length, challengeDetails.squares.length, challengeDetails.squares, challengeDetails.actors, parseInt(challengeDetails.theme));
     return new challenge.Game('#' + challengeDetails.name, map);
-};
+}
 
 exports.createGameWithViewer = function(name, nbX, nbY, theme, mapGame, callback){
     var mapClient = new RestClient();
