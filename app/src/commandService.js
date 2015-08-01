@@ -80,7 +80,7 @@ function createGame(name){
     }
 
     var map = new challenge.Map(challengeDetails.squares[0].length, challengeDetails.squares.length, challengeDetails.squares, challengeDetails.actors, parseInt(challengeDetails.theme));
-    return new challenge.Game('#' + challengeDetails.name, map);
+    return new challenge.Game(challengeDetails.name, map);
 }
 
 exports.createGameWithViewer = function(name, nbX, nbY, theme, mapGame, callback){

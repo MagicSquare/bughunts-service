@@ -1,6 +1,6 @@
 var challenge = require('bughunts-challenge');
 
-exports.name = '0x0001';
+exports.name = '#0x0001';
 
 exports.squares = [
     ['o','o','s','o','g'],
