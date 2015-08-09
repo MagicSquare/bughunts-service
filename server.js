@@ -60,7 +60,7 @@ app.get('/challenge/:challenge/command/:command', function (req, res, next) {
 });
 
 app.get('/victory/:challenge/:command', function (req, res, next) {
-    CommandService.executeLastChallenge(req.params.command, function(result) {
+    CommandService.executeChallenge(req.params.challenge, req.params.command, function(result) {
         res.render('victory', {
             url: 'http://lachasseauxbugs.fr:8111/victory/'+encodeURIComponent(req.params.challenge)+'/'+req.params.command+'/',
             challenge: result.challenge,
