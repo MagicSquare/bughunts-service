@@ -58,22 +58,22 @@ exports.playerSolvedChallenge = function(challengeHashtag, player, score, comman
 };
 
 exports.getHighscores = function(challengeHashtag, callback) {
-    function error(msg, error) {
+    function error(type, msg, error) {
         console.log(msg + ((typeof error === 'undefined')? '' : ': ' + error) );
-        callback({error: msg});
+        callback({error: msg, type: type});
     }
     db.challenge.find({hashTag: challengeHashtag}).toArray(function (err, challenges) {
         if (err) {
-            error('Error when loading highscores', err);
+            error(999, 'Error when loading highscores', err);
             return;
         }
         if (challenges.length === 0) {
-            error('no highscore for challenge '+challengeHashtag);
+            error(1, 'no highscore for challenge '+challengeHashtag);
             return;
         }
         var game = challenges[0];
         if (typeof game.players === 'undefined') {
-            error('No players on this challenge');
+            error(1, 'No players on this challenge');
             return;
         }
         var highscores = game.players;
