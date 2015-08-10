@@ -5,7 +5,6 @@ var mongo = require('mongoskin'),
 var db = mongo.db(config.db, {native_parser: true});
 db.bind('challenge');
 
-
 exports.registerChallenge = function (game, callback) {
     db.challenge.insert({
         hashTag: game.hashTag,
@@ -50,8 +49,8 @@ exports.getCurrentChallenge = function (callback) {
     });
 };
 
-exports.playerSolvedChallenge = function(challengeHashtag, player, score) {
-    db.challenge.update({hashTag: challengeHashtag}, {'$push': {players: {name: player, score: score}}}, function(err) {
+exports.playerSolvedChallenge = function(challengeHashtag, player, score, command) {
+    db.challenge.update({hashTag: challengeHashtag}, {'$push': {players: {name: player, score: score, command: command}}}, {upsert:true}, function(err) {
         if (err) {
             console.log(err);
         }
@@ -69,7 +68,7 @@ exports.getHighscores = function(challengeHashtag, callback) {
             return;
         }
         if (challenges.length === 0) {
-            error('No challenge found for highscores !');
+            error('no highscore for challenge '+challengeHashtag);
             return;
         }
         var game = challenges[0];
